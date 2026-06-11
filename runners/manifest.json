@@ -1,6 +1,7 @@
 {
   "runners": [
     "beagle",
+    "border-collie",
     "chicken",
     "fishman",
     "frog",
