@@ -1,0 +1,13 @@
+{
+  "runners": [
+    "beagle",
+    "chicken",
+    "fishman",
+    "frog",
+    "greyhound",
+    "otter",
+    "rabbit",
+    "squirrel",
+    "welsh-corgi"
+  ]
+}
