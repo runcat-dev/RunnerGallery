@@ -1,7 +1,7 @@
 # Contributing to Runner Gallery
 
 Thank you for your interest in sharing your custom runner!
-This repository distributes custom runner resources for [RunCat](https://kyome.io/runcat/), browsable at <https://runcat-dev.github.io/RunnerGallery/>.
+This repository distributes custom runner resources for [RunCat Neo](https://runcat-dev.github.io/RunCatNeo/), browsable at <https://runcat-dev.github.io/RunnerGallery/>.
 
 ## How to Add a Runner
 

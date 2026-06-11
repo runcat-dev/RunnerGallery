@@ -152,6 +152,7 @@ footer {
 nav a {
   text-decoration: none;
   color: #404040;
+  margin: 0 8px;
 }
 
 nav a:hover {
