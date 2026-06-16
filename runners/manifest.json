@@ -2,15 +2,16 @@
   "runners": [
     "beagle",
     "border-collie",
+    "greyhound",
+    "jack-russell-terrier",
+    "shiba-inu",
+    "welsh-corgi",
     "chicken",
     "fishman",
     "frog",
-    "greyhound",
     "otter",
     "rabbit",
-    "shiba-inu",
     "squirrel",
-    "wankel-engine",
-    "welsh-corgi"
+    "wankel-engine"
   ]
 }
