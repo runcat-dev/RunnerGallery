@@ -2,6 +2,7 @@
   "runners": [
     "beagle",
     "border-collie",
+    "golden-retriever",
     "greyhound",
     "jack-russell-terrier",
     "shiba-inu",
