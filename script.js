@@ -13,7 +13,7 @@ function createRunnerCard(runnerName, metadata) {
   const preview = document.createElement("div");
   preview.className = "runner-preview";
   const previewImage = document.createElement("img");
-  previewImage.src = `./runners/${runnerName}/preview.gif`;
+  previewImage.src = `./runners/${runnerName}/preview.png`;
   previewImage.alt = `${metadata.displayName} animation preview`;
   previewImage.loading = "lazy";
   preview.appendChild(previewImage);
