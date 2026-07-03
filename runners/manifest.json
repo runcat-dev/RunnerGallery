@@ -13,7 +13,8 @@
     "otter",
     "rabbit",
     "squirrel",
-    "wankel-engine",
-    "escapement"
+    "escapement",
+    "linkage",
+    "wankel-engine"
   ]
 }
