@@ -900,6 +900,9 @@ def emit_step_summary(report: Report, out) -> None:
     out.write("## Runner validation\n\n")
 
     if not report.problems:
+        if not report.checked:
+            out.write("✅ No runner was changed by this pull request; only the manifest was checked.\n")
+            return
         passed = plural(len(report.checked), "runner")
         out.write(f"✅ **{passed} passed** — archive contents, PNG integrity, and spec conformance.\n\n")
         out.write("<details><summary>What was checked</summary>\n\n")
@@ -947,7 +950,10 @@ def emit_step_summary(report: Report, out) -> None:
 
 def emit_human(report: Report) -> None:
     if not report.problems:
-        print(f"OK: {plural(len(report.checked), 'runner')} passed: {', '.join(report.checked)}")
+        if report.checked:
+            print(f"OK: {plural(len(report.checked), 'runner')} passed: {', '.join(report.checked)}")
+        else:
+            print("No runner was changed; only the manifest was checked.")
         return
 
     grouped: dict[str | None, list[Problem]] = {}
@@ -983,8 +989,9 @@ def main() -> int:
     in_actions = bool(os.environ.get("GITHUB_ACTIONS"))
     if in_actions:
         emit_annotations(report)
-    else:
-        emit_human(report)
+    # Always in the log too, so that a run which validated nothing at all reads
+    # as such instead of as a silent pass.
+    emit_human(report)
 
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
     if summary_path:
