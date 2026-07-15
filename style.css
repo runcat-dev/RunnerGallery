@@ -1,10 +1,9 @@
 body {
-  margin: 0 auto;
+  margin: 0;
   font-family: "Exo 2", sans-serif;
   background-color: #f5f5f5;
   text-align: center;
   min-height: 100vh;
-  min-width: 640px;
   display: flex;
   flex-direction: column;
 }
@@ -52,8 +51,8 @@ div.summary {
 
 p.title {
   font-style: italic;
-  font-size: 64px;
-  line-height: 64px;
+  font-size: clamp(40px, 12vw, 64px);
+  line-height: 1.1;
   margin: 20px auto;
 }
 
