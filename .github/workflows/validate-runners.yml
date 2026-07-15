@@ -1,0 +1,48 @@
+name: Validate runners
+
+# `pull_request`, never `pull_request_target`. This job feeds contributor-supplied
+# binaries to zlib, libpng, and Pillow's C decoders; it is the last thing in this
+# repository that should run with a writable token or access to secrets. A fork's
+# `pull_request` run gets a read-only token and no secrets, and that sandbox is the
+# actual security control here.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+# Do NOT add a `paths:` filter. Once this is a required status check, a filtered-out
+# pull request never reports the check and can never be merged. The job takes seconds.
+
+permissions:
+  contents: read
+
+concurrency:
+  group: validate-runners-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate runner assets
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install --disable-pip-version-check -r .github/scripts/requirements.txt
+
+      - name: Validate
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ -n "${BASE_SHA:-}" ]; then
+            python3 .github/scripts/validate_runners.py --changed-since "$BASE_SHA"
+          else
+            python3 .github/scripts/validate_runners.py --all
+          fi
