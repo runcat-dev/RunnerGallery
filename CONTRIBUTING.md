@@ -18,7 +18,7 @@ runners/
 └── <runner-name>/
     ├── <runner-name>-frames.zip
     ├── metadata.json
-    └── preview.gif
+    └── preview.png
 ```
 
 #### `<runner-name>-frames.zip`
@@ -56,16 +56,17 @@ zip -r <runner-name>-frames.zip <runner-name>-frames -x "*.DS_Store" "__MACOSX/*
 }
 ```
 
-#### `preview.gif`
+#### `preview.png`
 
-An animated GIF used for the gallery preview:
+An animated PNG (APNG) used for the gallery preview:
 
+- Format: APNG (a static PNG will not animate in the gallery)
 - Height: 36px
 - Width: at most 100px
 
 ### 3. Update the manifest
 
-Add your runner name to `runners/manifest.json`, keeping the list in alphabetical order:
+Add your runner name to `runners/manifest.json`, following the existing ordering of the list:
 
 ```json
 {
