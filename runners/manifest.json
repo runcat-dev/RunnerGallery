@@ -2,20 +2,21 @@
   "runners": [
     "beagle",
     "border-collie",
+    "chicken",
+    "chihuahua",
+    "escapement",
+    "fishman",
+    "frog",
     "golden-retriever",
     "greyhound",
     "jack-russell-terrier",
-    "shiba-inu",
-    "welsh-corgi",
-    "chicken",
-    "fishman",
-    "frog",
+    "linkage",
     "otter",
     "rabbit",
+    "record-player",
+    "shiba-inu",
     "squirrel",
-    "escapement",
-    "linkage",
     "wankel-engine",
-    "record-player"
+    "welsh-corgi"
   ]
 }
