@@ -34,12 +34,13 @@ A zip archive of a `<runner-name>-frames/` directory containing the animation fr
 
 Frame requirements:
 
-- Format: PNG
+- Format: PNG, not interlaced
+- File name: `<runner-name>-frame-<N>.png`, numbered consecutively from `0`
 - Height: exactly 36px
 - Width: between 10px and 100px
 - All frames must have the same size
 - A transparent background is recommended
-- Avoid including Finder-generated files such as `.DS_Store`, `__MACOSX/`, and `._*` in the zip
+- The zip must contain nothing but the frames — no Finder-generated files such as `.DS_Store`, `__MACOSX/`, or `._*`
 
 Tip for macOS users — creating the zip from the command line avoids Finder-generated junk:
 
@@ -60,7 +61,7 @@ zip -r <runner-name>-frames.zip <runner-name>-frames -x "*.DS_Store" "__MACOSX/*
 
 An animated PNG (APNG) used for the gallery preview:
 
-- Format: APNG (a static PNG will not animate in the gallery)
+- Format: APNG, not interlaced (a static PNG will not animate in the gallery)
 - Height: 36px
 - Width: at most 100px
 
@@ -77,7 +78,19 @@ Add your runner name to `runners/manifest.json`, following the existing ordering
 }
 ```
 
-### 4. Open a Pull Request
+### 4. Check your runner locally
+
+Every Pull Request is automatically checked: the frame archive must contain nothing but your frames, and every image must be a genuine, fully decodable PNG.
+You can run exactly the same checks yourself before pushing, so that you do not have to wait for CI:
+
+```sh
+pip install -r .github/scripts/requirements.txt
+python3 .github/scripts/validate_runners.py --all
+```
+
+Anything it reports tells you which file is at fault and what to change.
+
+### 5. Open a Pull Request
 
 1. Fork this repository and create a branch.
 2. Commit your runner files and the manifest change.
