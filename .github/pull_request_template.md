@@ -12,7 +12,8 @@
 
 ## Checklist for Adding a Runner
 
-- [ ] All frames are PNG files with a height of exactly 36px, a width between 10px and 100px, and all frames share the same size.
+- [ ] All frames are PNG files named `<runner-name>-frame-<N>.png` (numbered from 0), with a height of exactly 36px, a width between 10px and 100px, and all frames share the same size.
+- [ ] The zip contains only the frames — no `.DS_Store`, `__MACOSX/`, or `._*` entries.
 - [ ] The runner is my original work, or I hold the rights to it, and I consent to its distribution under this repository's license (Apache-2.0).
 - [ ] The runner does NOT contain third-party intellectual property (e.g., Pokémon, Mario, or other copyrighted/trademarked characters).
 - [ ] Files are placed at `runners/<runner-name>/` as `<runner-name>-frames.zip`, `metadata.json`, and `preview.png`.
