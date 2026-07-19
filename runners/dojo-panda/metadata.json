@@ -1,4 +1,9 @@
 {
   "author": "IshankChoudhary (IshankChoudhary)",
-  "displayName": "Dojo Panda"
+  "displayName": "Dojo Panda",
+  "type": "color",
+  "tags": [
+    "animal",
+    "fitness"
+  ]
 }

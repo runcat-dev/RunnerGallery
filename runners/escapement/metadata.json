@@ -1,4 +1,9 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Escapement"
+  "displayName": "Escapement",
+  "type": "monochrome",
+  "tags": [
+    "object",
+    "mechanism"
+  ]
 }

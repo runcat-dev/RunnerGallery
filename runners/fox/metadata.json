@@ -1,4 +1,8 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Fox"
+  "displayName": "Fox",
+  "type": "monochrome",
+  "tags": [
+    "animal"
+  ]
 }

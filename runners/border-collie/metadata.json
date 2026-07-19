@@ -1,4 +1,9 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Border Collie"
+  "displayName": "Border Collie",
+  "type": "monochrome",
+  "tags": [
+    "animal",
+    "dog"
+  ]
 }

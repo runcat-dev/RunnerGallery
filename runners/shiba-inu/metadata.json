@@ -1,4 +1,9 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Shiba Inu"
+  "displayName": "Shiba Inu",
+  "type": "monochrome",
+  "tags": [
+    "animal",
+    "dog"
+  ]
 }

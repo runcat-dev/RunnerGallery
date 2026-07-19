@@ -1,4 +1,8 @@
 {
   "author": "Sangyoon (Sangyoon98)",
-  "displayName": "Turtle"
+  "displayName": "Turtle",
+  "type": "monochrome",
+  "tags": [
+    "animal"
+  ]
 }

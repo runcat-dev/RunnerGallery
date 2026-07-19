@@ -1,4 +1,9 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Linkage"
+  "displayName": "Linkage",
+  "type": "monochrome",
+  "tags": [
+    "object",
+    "mechanism"
+  ]
 }

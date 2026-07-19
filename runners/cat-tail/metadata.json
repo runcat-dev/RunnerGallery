@@ -1,4 +1,8 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Cat's Tail"
+  "displayName": "Cat's Tail",
+  "type": "monochrome",
+  "tags": [
+    "animal"
+  ]
 }
