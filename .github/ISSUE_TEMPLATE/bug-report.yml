@@ -1,0 +1,52 @@
+name: Bug Report
+description: Report a problem with the gallery site, a runner asset, or the validation script.
+title: '[Bug] '
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug.
+        For issues with the **RunCat Neo menubar app itself**, please file them at the [RunCat Neo repository](https://github.com/runcat-dev/RunCatNeo/issues) instead.
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where does the bug occur?
+      options:
+        - Gallery site (https://runcat-dev.github.io/RunnerGallery/)
+        - A specific runner's asset (frames or preview)
+        - Validation script / CI
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open ...
+        2. Click ...
+        3. See ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual behavior
+      description: What did you expect to happen, and what happened instead?
+    validations:
+      required: true
+  - type: input
+    id: env
+    attributes:
+      label: Browser / OS (if gallery bug)
+      placeholder: Safari 18 on macOS 15
+    validations:
+      required: false
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues (open and closed) and confirmed this bug has not already been reported.
+          required: true

@@ -1,0 +1,56 @@
+name: Runner Request
+description: Request a new custom runner or a revival of a classic RunCat runner.
+title: 'Request: add the "___" runner'
+labels: ["runner-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a runner! Please fill in the fields below.
+        If you plan to submit the runner yourself, see [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md).
+  - type: input
+    id: runner-name
+    attributes:
+      label: Proposed runner name
+      description: A short descriptive name (e.g. "Panda", "Steam Locomotive"). It does not have to be the final directory name.
+      placeholder: Panda
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of request
+      options:
+        - Revival of a classic RunCat runner
+        - Completely new runner
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What should this runner look like and how should it move? Attach reference images or animations if you have them.
+      placeholder: A silhouette of a running panda with...
+    validations:
+      required: true
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Are you planning to submit a PR yourself?
+      options:
+        - Yes — I'll open a PR
+        - Maybe
+        - No — I'm requesting for someone else to make it
+    validations:
+      required: true
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I searched existing issues (open and closed) and confirmed this runner has not already been requested.
+          required: true
+        - label: This runner does NOT contain third-party intellectual property (e.g. Pokémon, Mario, or other copyrighted/trademarked characters).
+          required: true
+        - label: I have read [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md) if I'm planning to submit a PR.
+          required: false

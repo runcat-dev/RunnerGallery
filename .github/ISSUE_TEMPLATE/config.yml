@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: RunCat Neo app issues
+    url: https://github.com/runcat-dev/RunCatNeo/issues
+    about: For bugs or requests about the RunCat Neo menubar app itself, please file them there instead.
