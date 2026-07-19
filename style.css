@@ -70,6 +70,78 @@ p.gallery-status {
   color: #606060;
 }
 
+div.filters {
+  margin: 0 0 24px;
+}
+
+div.tabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  background-color: #ececec;
+  border-radius: 999px;
+}
+
+button.tab {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  color: #606060;
+  background: transparent;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+button.tab:hover:not(.active) {
+  color: cadetblue;
+}
+
+button.tab.active {
+  background-color: #606060;
+  color: #f5f5f5;
+}
+
+div.tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+button.chip {
+  font-family: inherit;
+  font-size: 13px;
+  color: #606060;
+  background-color: #ffffff;
+  border: 1px solid #d0d0d0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+button.chip:hover:not(.active) {
+  border-color: cadetblue;
+  color: cadetblue;
+}
+
+button.chip.active {
+  background-color: cadetblue;
+  border-color: cadetblue;
+  color: #f5f5f5;
+}
+
+button.chip-clear {
+  color: darkcyan;
+  border-style: dashed;
+}
+
+button.chip-clear:hover {
+  color: cadetblue;
+}
+
 div.runner-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
