@@ -74,7 +74,13 @@ APPLEDOUBLE_REASON = "macOS AppleDouble metadata. " + REZIP_HINT
 HIDDEN_REASON = "hidden. The archive must contain only the frame PNGs."
 
 EXPECTED_FILES = ("{name}-frames.zip", "metadata.json", "preview.png")
-METADATA_KEYS = {"author", "displayName"}
+METADATA_KEYS = {"author", "displayName", "type", "tags"}
+METADATA_STRING_KEYS = {"author", "displayName", "type"}
+RUNNER_TYPES = ("monochrome", "color")
+KNOWN_TAGS = ("animal", "dog", "object", "mechanism", "fitness")
+TAG_HIERARCHY = {"dog": "animal", "mechanism": "object"}
+TAG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+MAX_TAGS = 8
 
 
 class PngError(Exception):
@@ -658,15 +664,16 @@ def validate_metadata(root: Path, name: str, report: Report) -> None:
     if missing:
         report.error(name, path, "Missing required key(s): " + ", ".join(f"`{key}`" for key in sorted(missing)) + ".")
     if unexpected:
+        allowed = ", ".join(f"`{key}`" for key in sorted(METADATA_KEYS))
         report.error(
             name,
             path,
             "Unexpected key(s): "
             + ", ".join(f"`{key}`" for key in sorted(unexpected))
-            + ". Only `author` and `displayName` are used.",
+            + f". Only {allowed} are used.",
         )
 
-    for key in sorted(METADATA_KEYS & keys):
+    for key in sorted(METADATA_STRING_KEYS & keys):
         value = metadata[key]
         if not isinstance(value, str):
             report.error(name, path, f"`{key}` must be a string.")
@@ -678,6 +685,44 @@ def validate_metadata(root: Path, name: str, report: Report) -> None:
             report.error(name, path, f"`{key}` is {len(value)} characters; at most {MAX_METADATA_VALUE_LENGTH} are allowed.")
         if any(ord(character) < 0x20 or ord(character) == 0x7F for character in value):
             report.error(name, path, f"`{key}` contains control characters.")
+
+    if "type" in keys and isinstance(metadata["type"], str) and metadata["type"] not in RUNNER_TYPES:
+        allowed = " or ".join(f'"{value}"' for value in RUNNER_TYPES)
+        report.error(name, path, f"`type` must be {allowed}.")
+
+    if "tags" in keys:
+        validate_tags(metadata["tags"], name, path, report)
+
+
+def validate_tags(tags: object, name: str, path: str, report: Report) -> None:
+    if not isinstance(tags, list):
+        report.error(name, path, "`tags` must be an array of strings.")
+        return
+    if len(tags) > MAX_TAGS:
+        report.error(name, path, f"`tags` has {len(tags)} entries; at most {MAX_TAGS} are allowed.")
+
+    seen: set[str] = set()
+    valid_tags: set[str] = set()
+    for tag in tags:
+        if not isinstance(tag, str):
+            report.error(name, path, "`tags` entries must be strings.")
+            continue
+        if not TAG_RE.match(tag):
+            report.error(name, path, f"`{tag}` is not a valid tag. Use lowercase letters, digits, and hyphens.")
+            continue
+        if tag not in KNOWN_TAGS:
+            allowed = ", ".join(f"`{value}`" for value in KNOWN_TAGS)
+            report.error(name, path, f"`{tag}` is not a known tag. Known tags: {allowed}.")
+            continue
+        if tag in seen:
+            report.error(name, path, f"`{tag}` is listed more than once in `tags`.")
+            continue
+        seen.add(tag)
+        valid_tags.add(tag)
+
+    for child, parent in TAG_HIERARCHY.items():
+        if child in valid_tags and parent not in valid_tags:
+            report.error(name, path, f"`tags` includes `{child}` but is missing its parent tag `{parent}`.")
 
 
 def validate_preview(root: Path, name: str, report: Report) -> None:
@@ -757,7 +802,11 @@ def validate_directory_contents(name: str, tracked: dict[str, str], report: Repo
 
 def describe_expected(name: str, filename: str) -> str:
     if filename == "metadata.json":
-        return 'It holds the runner\'s `author` and `displayName`, e.g. `{"author": "Your Name (YourGitHubID)", "displayName": "Display Name"}`.'
+        return (
+            'It holds the runner\'s `author`, `displayName`, `type`, and `tags`, e.g. '
+            '`{"author": "Your Name (YourGitHubID)", "displayName": "Display Name", '
+            '"type": "monochrome", "tags": ["animal"]}`.'
+        )
     if filename == "preview.png":
         return "Every runner needs an animated PNG preview, 36px tall and at most 100px wide."
     return f"It holds the animation frames as `{name}-frames/{name}-frame-N.png`."
@@ -830,6 +879,17 @@ def validate_manifest(root: Path, tracked: dict[str, str], report: Report) -> No
         if item in seen:
             report.error(None, path, f"`{item}` is listed more than once.")
         seen.add(item)
+
+    if listed != sorted(listed):
+        for index, (actual, expected) in enumerate(zip(listed, sorted(listed))):
+            if actual != expected:
+                report.error(
+                    None,
+                    path,
+                    f"`runners` must be sorted alphabetically. `{actual}` at position {index} "
+                    f"should be `{expected}`.",
+                )
+                break
 
     on_disk = set(runner_names_on_disk(tracked))
 

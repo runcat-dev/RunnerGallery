@@ -1,4 +1,9 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Wankel Engine"
+  "displayName": "Wankel Engine",
+  "type": "monochrome",
+  "tags": [
+    "object",
+    "mechanism"
+  ]
 }

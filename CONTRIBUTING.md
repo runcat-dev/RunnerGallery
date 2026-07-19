@@ -53,9 +53,32 @@ zip -r <runner-name>-frames.zip <runner-name>-frames -x "*.DS_Store" "__MACOSX/*
 ```json
 {
   "author": "Your Name (YourGitHubID)",
-  "displayName": "Display Name"
+  "displayName": "Display Name",
+  "type": "monochrome",
+  "tags": ["animal"]
 }
 ```
+
+`type` must be one of:
+
+- `monochrome` — grayscale or single-color runners
+- `color` — runners that use more than one hue
+
+`tags` is a list of tags, chosen from this closed set:
+
+| tag | meaning |
+|---|---|
+| `animal` | Any living creature, including fictional ones (excludes human-shaped characters) |
+| `dog` | Dogs. Requires `animal` as well |
+| `object` | Inanimate objects, tools, geometric shapes |
+| `mechanism` | Moving mechanical devices. Requires `object` as well |
+| `fitness` | Exercise or workout-themed runners |
+
+Guidelines:
+
+- Human-shaped characters do not receive `animal`. If nothing fits, use an empty array `[]`.
+- Prefer fewer tags when unsure. Extra tags can always be added later.
+- Adding a new tag needs to be proposed in a separate PR that updates both this document and `KNOWN_TAGS` in `.github/scripts/validate_runners.py`.
 
 #### `preview.png`
 
@@ -67,7 +90,7 @@ An animated PNG (APNG) used for the gallery preview:
 
 ### 3. Update the manifest
 
-Add your runner name to `runners/manifest.json`, following the existing ordering of the list:
+Add your runner name to `runners/manifest.json`. Keep the list sorted alphabetically. CI enforces this.
 
 ```json
 {

@@ -1,4 +1,9 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Greyhound"
+  "displayName": "Greyhound",
+  "type": "monochrome",
+  "tags": [
+    "animal",
+    "dog"
+  ]
 }

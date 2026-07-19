@@ -1,4 +1,9 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Record Player"
+  "displayName": "Record Player",
+  "type": "monochrome",
+  "tags": [
+    "object",
+    "mechanism"
+  ]
 }

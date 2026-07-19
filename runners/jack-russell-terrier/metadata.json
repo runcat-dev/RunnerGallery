@@ -1,4 +1,9 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Jack Russell Terrier"
+  "displayName": "Jack Russell Terrier",
+  "type": "monochrome",
+  "tags": [
+    "animal",
+    "dog"
+  ]
 }

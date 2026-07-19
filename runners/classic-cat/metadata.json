@@ -1,4 +1,8 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Classic Cat"
+  "displayName": "Classic Cat",
+  "type": "monochrome",
+  "tags": [
+    "animal"
+  ]
 }

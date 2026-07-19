@@ -1,4 +1,8 @@
 {
   "author": "kujira-wak",
-  "displayName": "Spinning Bonfire"
+  "displayName": "Spinning Bonfire",
+  "type": "color",
+  "tags": [
+    "object"
+  ]
 }

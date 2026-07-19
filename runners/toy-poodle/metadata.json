@@ -1,4 +1,9 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Toy Poodle"
+  "displayName": "Toy Poodle",
+  "type": "monochrome",
+  "tags": [
+    "animal",
+    "dog"
+  ]
 }

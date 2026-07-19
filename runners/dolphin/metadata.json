@@ -1,4 +1,8 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Dolphin"
+  "displayName": "Dolphin",
+  "type": "monochrome",
+  "tags": [
+    "animal"
+  ]
 }

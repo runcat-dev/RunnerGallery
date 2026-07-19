@@ -1,4 +1,8 @@
 {
   "author": "Mao Kawaguchi (uhooi)",
-  "displayName": "Uhooi"
+  "displayName": "Uhooi",
+  "type": "color",
+  "tags": [
+    "animal"
+  ]
 }
