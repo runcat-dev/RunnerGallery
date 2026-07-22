@@ -60,12 +60,12 @@ git push -u origin add-<name>
 **Always start by `Read`ing `.github/pull_request_template.md`** and use its current contents as the PR body — never a hardcoded copy inside this skill, since the template can change and this document will drift. Fill it in by:
 
 - Checking the `Add a new runner` box under `Type of Change`.
-- Writing the `Runner Summary` (see below).
+- Writing the `Summary` (see below).
 - Ticking every item under `Checklist for Adding a Runner` that step 1 actually verified.
 
 If a new checklist item appears in the template that step 1 did not cover, verify it now before ticking — do not tick blindly just because the item is new.
 
-Write the Runner Summary in **English**, even when the conversation with the user is in Japanese (per the global rule that PRs on OSS repos are written in English). Match the tone of recent PRs — inspect one with `gh pr view <number> --json body -q .body` first. Format:
+Write the Summary in **English**, even when the conversation with the user is in Japanese (per the global rule that PRs on OSS repos are written in English). Match the tone of recent PRs — inspect one with `gh pr view <number> --json body -q .body` first. Format:
 
 ```
 `<name>` — a <monochrome|color> runner featuring <one-line visual description>. <N> frames at <W>×36.
@@ -78,7 +78,7 @@ Create the PR by passing the filled-in template body via a heredoc:
 
 ```bash
 gh pr create --title "Add the <name> runner" --body "$(cat <<'EOF'
-<contents of .github/pull_request_template.md with the Type of Change box, Runner Summary, and verified checklist items filled in>
+<contents of .github/pull_request_template.md with the Type of Change box, Summary, and verified checklist items filled in>
 EOF
 )"
 ```
@@ -88,6 +88,6 @@ After creating, verify with `gh pr view <number> --json body -q .body` and retur
 ## Common mistakes
 
 - **Skipping the PR template and writing a bespoke summary** → always `Read` the template first, then `gh pr create` with it.
-- **Writing the Runner Summary in Japanese** → English. The chat may be in Japanese; the PR body is not.
+- **Writing the Summary in Japanese** → English. The chat may be in Japanese; the PR body is not.
 - **Ticking every checkbox without verifying** → verify first, then tick. If the asset breaks the spec, hand it back for fixes rather than loosening the checklist.
 - **Breaking the manifest ordering** → keep `runners/manifest.json` alphabetical.
