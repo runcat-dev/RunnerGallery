@@ -4,3 +4,6 @@
 # Editor
 .vscode/
 .idea/
+
+# Runner source frames (only the zip is committed)
+runners/**/*-frames/
