@@ -6,11 +6,13 @@
 - [ ] Fix or improve an existing runner
 - [ ] Other (site, docs, tooling)
 
-## Runner Summary
+## Summary
 
-<!-- For runner changes: the runner name and a short description of the character/animation. -->
+<!-- Briefly describe what this PR changes and why. For a new runner, include the runner name and a short description of the character/animation. -->
 
 ## Checklist for Adding a Runner
+
+<!-- Skip this section if this PR is not adding a new runner. -->
 
 - [ ] I have read [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md) and followed the steps described there.
 - [ ] The runner is my original work, or I hold the rights to it, and I consent to its distribution under this repository's license (Apache-2.0).
