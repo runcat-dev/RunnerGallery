@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         Thanks for suggesting a runner! Please fill in the fields below.
-        If you plan to submit the runner yourself, see [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md).
+        If you plan to submit the runner yourself, see [CONTRIBUTING.md](https://github.com/runcat-dev/RunnerGallery/blob/main/CONTRIBUTING.md).
   - type: input
     id: runner-name
     attributes:
@@ -52,5 +52,5 @@ body:
           required: true
         - label: This runner does NOT contain third-party intellectual property (e.g. Pokémon, Mario, or other copyrighted/trademarked characters).
           required: true
-        - label: I have read [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md) if I'm planning to submit a PR.
+        - label: I have read [CONTRIBUTING.md](https://github.com/runcat-dev/RunnerGallery/blob/main/CONTRIBUTING.md) if I'm planning to submit a PR.
           required: false
