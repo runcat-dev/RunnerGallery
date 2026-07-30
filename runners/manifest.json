@@ -1,5 +1,6 @@
 {
   "runners": [
+    "ant",
     "beagle",
     "bird",
     "border-collie",
