@@ -37,7 +37,7 @@ Frame requirements:
 - Format: PNG, not interlaced
 - File name: `<runner-name>-frame-<N>.png`, numbered consecutively from `0`
 - Height: exactly 36px
-- Width: between 10px and 100px
+- Width: between 10px and 300px
 - All frames must have the same size
 - A transparent background is recommended
 - The zip must contain nothing but the frames — no Finder-generated files such as `.DS_Store`, `__MACOSX/`, or `._*`
@@ -86,7 +86,7 @@ An animated PNG (APNG) used for the gallery preview:
 
 - Format: APNG, not interlaced (a static PNG will not animate in the gallery)
 - Height: 36px
-- Width: at most 100px
+- Width: at most 300px
 
 ### 3. Update the manifest
 

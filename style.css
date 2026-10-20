@@ -173,6 +173,7 @@ div.runner-preview {
 div.runner-preview img {
   height: 54px;
   max-width: 100%;
+  object-fit: contain;
 }
 
 p.runner-name {
