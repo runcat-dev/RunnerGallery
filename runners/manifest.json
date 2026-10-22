@@ -1,5 +1,6 @@
 {
   "runners": [
+    "alien-wave",
     "beagle",
     "bird",
     "border-collie",
