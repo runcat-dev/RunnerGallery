@@ -8,6 +8,7 @@ body:
       value: |
         Thanks for suggesting a runner! Please fill in the fields below.
         If you plan to submit the runner yourself, see [CONTRIBUTING.md](https://github.com/runcat-dev/RunnerGallery/blob/main/CONTRIBUTING.md).
+        Classic RunCat runners are revived only by the maintainer, so please do not open a PR for them.
   - type: input
     id: runner-name
     attributes:
@@ -37,6 +38,7 @@ body:
     id: contribution
     attributes:
       label: Are you planning to submit a PR yourself?
+      description: For a revival of a classic RunCat runner, choose "No". The maintainer prepares those.
       options:
         - Yes — I'll open a PR
         - Maybe
