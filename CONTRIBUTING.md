@@ -115,6 +115,10 @@ Anything it reports tells you which file is at fault and what to change.
 
 ### 5. Open a Pull Request
 
+Add only one runner per Pull Request.
+If you want to add several runners, open a separate Pull Request for each one.
+A Pull Request that bundles multiple runners cannot be reviewed and will be closed.
+
 1. Fork this repository and create a branch.
 2. Commit your runner files and the manifest change.
 3. Open a Pull Request and fill in the template, including the checklist.
