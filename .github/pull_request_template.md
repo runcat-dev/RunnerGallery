@@ -15,6 +15,7 @@
 <!-- Skip this section if this PR is not adding a new runner. -->
 
 - [ ] I have read [CONTRIBUTING.md](../blob/main/CONTRIBUTING.md) and followed the steps described there.
+- [ ] This PR adds exactly one runner. Each additional runner has its own PR.
 - [ ] The runner is my original work, or I hold the rights to it, and I consent to its distribution under this repository's license (Apache-2.0).
 - [ ] The runner does NOT contain third-party intellectual property (e.g., Pokémon, Mario, or other copyrighted/trademarked characters).
 - [ ] Files are placed at `runners/<runner-name>/` as `<runner-name>-frames.zip`, `metadata.json`, and `preview.png`.
