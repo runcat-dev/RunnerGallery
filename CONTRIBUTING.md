@@ -124,6 +124,8 @@ Anything it reports tells you which file is at fault and what to change.
 - By submitting a runner, you agree that it will be distributed under this repository's [Apache-2.0 license](LICENSE).
 - The runner must be your original work, or you must hold the rights to it.
 - Runners containing third-party intellectual property (e.g., Pokémon, Mario, or other copyrighted/trademarked characters) cannot be accepted, even as fan art.
+- Classic RunCat runners are revived only by the maintainer, who adjusts every frame again before adding them to the gallery.
+  Please do not submit them yourself; to ask for one, open a [Runner Request](https://github.com/runcat-dev/RunnerGallery/issues/new?template=runner-request.yml) instead.
 
 ## Previewing the Site Locally
 
