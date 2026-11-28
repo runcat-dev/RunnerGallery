@@ -27,7 +27,7 @@ runners/
 #### `frames/`
 
 The animation frames, committed as individual PNG files.
-Do not zip them; the gallery builds the downloadable zip from these files and `metadata.json`.
+Do not zip them; the gallery builds the downloadable zip from these files and `metadata.json` (see [Download Format](#download-format)).
 
 Frame requirements:
 
@@ -139,12 +139,31 @@ A Pull Request that bundles multiple runners cannot be reviewed and will be clos
 - Classic RunCat runners are revived only by the maintainer, who adjusts every frame again before adding them to the gallery.
   Please do not submit them yourself; to ask for one, open a [Runner Request](https://github.com/runcat-dev/RunnerGallery/issues/new?template=runner-request.yml) instead.
 
+## Download Format
+
+The downloadable zips are not stored in this repository.
+When `main` is deployed to GitHub Pages, `.github/scripts/build_site.py` builds `runners/<runner-name>/<runner-name>.zip` for every runner with the following layout:
+
+```
+<runner-name>.zip
+├── metadata.json
+└── frames/
+    ├── <runner-name>-frame-0.png
+    ├── <runner-name>-frame-1.png
+    └── ...
+```
+
+- `metadata.json` is the runner's `metadata.json`, byte for byte, so an app importing the zip can read the localized `displayName` and the `type`.
+- The frames play in ascending numeric order of `<N>`.
+
 ## Previewing the Site Locally
 
-The gallery page loads `runners/manifest.json` with `fetch()`, which does not work over `file://`. Run a local server from the repository root instead:
+The gallery page loads `runners/manifest.json` with `fetch()`, which does not work over `file://`.
+Build the site and serve it from the `_site` directory instead:
 
 ```sh
-python3 -m http.server 8000
+python3 .github/scripts/build_site.py
+python3 -m http.server 8000 -d _site
 ```
 
 Then open <http://localhost:8000/> in your browser.

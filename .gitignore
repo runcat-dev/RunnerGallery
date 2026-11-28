@@ -4,3 +4,6 @@
 # Editor
 .vscode/
 .idea/
+
+# Site build output
+_site/

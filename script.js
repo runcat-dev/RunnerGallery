@@ -49,7 +49,7 @@ function createRunnerCard(runner) {
 
   const downloadLink = document.createElement("a");
   downloadLink.className = "download-button";
-  downloadLink.href = `./runners/${runner.name}/${runner.name}-frames.zip`;
+  downloadLink.href = `./runners/${runner.name}/${runner.name}.zip`;
   downloadLink.setAttribute("download", "");
   downloadLink.textContent = localized("download");
 
