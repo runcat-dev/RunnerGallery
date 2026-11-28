@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Frog",
+  "displayName": {
+    "en": "Frog",
+    "de": "Frosch",
+    "es": "Rana",
+    "fr": "Grenouille",
+    "ja": "カエル",
+    "ko": "개구리",
+    "ru": "Лягушка",
+    "vi": "Ếch",
+    "zh-Hans": "青蛙",
+    "zh-Hant": "青蛙"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Hecken Link",
+  "displayName": {
+    "en": "Hecken Link",
+    "de": "Hecken-Link",
+    "es": "Hecken Link",
+    "fr": "Hecken Link",
+    "ja": "ヘッケンリンク",
+    "ko": "헤켄 링크",
+    "ru": "Хеккен-линк",
+    "vi": "Hecken Link",
+    "zh-Hans": "赫肯连杆",
+    "zh-Hant": "赫肯連桿"
+  },
   "type": "monochrome",
   "tags": [
     "object",

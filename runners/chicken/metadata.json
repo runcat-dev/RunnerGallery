@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Chicken",
+  "displayName": {
+    "en": "Chicken",
+    "de": "Huhn",
+    "es": "Gallina",
+    "fr": "Poule",
+    "ja": "ニワトリ",
+    "ko": "닭",
+    "ru": "Курица",
+    "vi": "Gà",
+    "zh-Hans": "鸡",
+    "zh-Hant": "雞"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

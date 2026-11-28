@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Escapement",
+  "displayName": {
+    "en": "Escapement",
+    "de": "Hemmung",
+    "es": "Escape",
+    "fr": "Échappement",
+    "ja": "脱進機",
+    "ko": "탈진기",
+    "ru": "Спусковой механизм",
+    "vi": "Bộ thoát",
+    "zh-Hans": "擒纵机构",
+    "zh-Hant": "擒縱機構"
+  },
   "type": "monochrome",
   "tags": [
     "object",

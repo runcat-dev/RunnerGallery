@@ -1,6 +1,17 @@
 {
   "author": "Sangyoon (Sangyoon98)",
-  "displayName": "Turtle",
+  "displayName": {
+    "en": "Turtle",
+    "de": "Schildkröte",
+    "es": "Tortuga",
+    "fr": "Tortue",
+    "ja": "カメ",
+    "ko": "거북",
+    "ru": "Черепаха",
+    "vi": "Rùa",
+    "zh-Hans": "乌龟",
+    "zh-Hant": "烏龜"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

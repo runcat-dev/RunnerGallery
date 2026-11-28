@@ -1,6 +1,17 @@
 {
   "author": "总钻风 (custsly)",
-  "displayName": "Wall Breaker",
+  "displayName": {
+    "en": "Wall Breaker",
+    "de": "Mauerbrecher",
+    "es": "Rompemuros",
+    "fr": "Casseur de murs",
+    "ja": "壁破り",
+    "ko": "벽 부수기",
+    "ru": "Крушитель стен",
+    "vi": "Kẻ phá tường",
+    "zh-Hans": "破墙者",
+    "zh-Hant": "破牆者"
+  },
   "type": "color",
   "tags": []
 }

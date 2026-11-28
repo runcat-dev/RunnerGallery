@@ -1,6 +1,17 @@
 {
   "author": "Mao Kawaguchi (uhooi)",
-  "displayName": "Uhooi",
+  "displayName": {
+    "en": "Uhooi",
+    "de": "Uhooi",
+    "es": "Uhooi",
+    "fr": "Uhooi",
+    "ja": "ウホーイ",
+    "ko": "Uhooi",
+    "ru": "Uhooi",
+    "vi": "Uhooi",
+    "zh-Hans": "Uhooi",
+    "zh-Hant": "Uhooi"
+  },
   "type": "color",
   "tags": [
     "animal"

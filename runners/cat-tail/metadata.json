@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Cat's Tail",
+  "displayName": {
+    "en": "Cat's Tail",
+    "de": "Katzenschwanz",
+    "es": "Cola de gato",
+    "fr": "Queue de chat",
+    "ja": "ネコのしっぽ",
+    "ko": "고양이 꼬리",
+    "ru": "Кошачий хвост",
+    "vi": "Đuôi mèo",
+    "zh-Hans": "猫尾巴",
+    "zh-Hant": "貓尾巴"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

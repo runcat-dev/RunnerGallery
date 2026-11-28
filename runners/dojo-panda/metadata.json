@@ -1,6 +1,17 @@
 {
   "author": "IshankChoudhary (IshankChoudhary)",
-  "displayName": "Dojo Panda",
+  "displayName": {
+    "en": "Dojo Panda",
+    "de": "Dojo-Panda",
+    "es": "Panda del dojo",
+    "fr": "Panda du dojo",
+    "ja": "道場パンダ",
+    "ko": "도장 판다",
+    "ru": "Панда в додзё",
+    "vi": "Gấu trúc võ đường",
+    "zh-Hans": "道场熊猫",
+    "zh-Hant": "道場熊貓"
+  },
   "type": "color",
   "tags": [
     "animal",

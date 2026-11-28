@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Penguin",
+  "displayName": {
+    "en": "Penguin",
+    "de": "Pinguin",
+    "es": "Pingüino",
+    "fr": "Manchot",
+    "ja": "ペンギン",
+    "ko": "펭귄",
+    "ru": "Пингвин",
+    "vi": "Chim cánh cụt",
+    "zh-Hans": "企鹅",
+    "zh-Hant": "企鵝"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

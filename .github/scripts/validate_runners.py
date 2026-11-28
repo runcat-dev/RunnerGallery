@@ -76,7 +76,8 @@ HIDDEN_REASON = "hidden. The archive must contain only the frame PNGs."
 
 EXPECTED_FILES = ("{name}-frames.zip", "metadata.json", "preview.png")
 METADATA_KEYS = {"author", "displayName", "type", "tags"}
-METADATA_STRING_KEYS = {"author", "displayName", "type"}
+METADATA_STRING_KEYS = {"author", "type"}
+SUPPORTED_LANGUAGES = ("en", "de", "es", "fr", "ja", "ko", "ru", "vi", "zh-Hans", "zh-Hant")
 RUNNER_TYPES = ("monochrome", "color")
 KNOWN_TAGS = ("animal", "dog", "object", "mechanism", "fitness")
 TAG_HIERARCHY = {"dog": "animal", "mechanism": "object"}
@@ -683,17 +684,10 @@ def validate_metadata(root: Path, name: str, report: Report) -> None:
         )
 
     for key in sorted(METADATA_STRING_KEYS & keys):
-        value = metadata[key]
-        if not isinstance(value, str):
-            report.error(name, path, f"`{key}` must be a string.")
-            continue
-        if not value.strip():
-            report.error(name, path, f"`{key}` must not be empty.")
-            continue
-        if len(value) > MAX_METADATA_VALUE_LENGTH:
-            report.error(name, path, f"`{key}` is {len(value)} characters; at most {MAX_METADATA_VALUE_LENGTH} are allowed.")
-        if any(ord(character) < 0x20 or ord(character) == 0x7F for character in value):
-            report.error(name, path, f"`{key}` contains control characters.")
+        validate_string_value(metadata[key], f"`{key}`", name, path, report)
+
+    if "displayName" in keys:
+        validate_display_name(metadata["displayName"], name, path, report)
 
     if "type" in keys and isinstance(metadata["type"], str) and metadata["type"] not in RUNNER_TYPES:
         allowed = " or ".join(f'"{value}"' for value in RUNNER_TYPES)
@@ -701,6 +695,54 @@ def validate_metadata(root: Path, name: str, report: Report) -> None:
 
     if "tags" in keys:
         validate_tags(metadata["tags"], name, path, report)
+
+
+def validate_string_value(value: object, label: str, name: str, path: str, report: Report) -> None:
+    if not isinstance(value, str):
+        report.error(name, path, f"{label} must be a string.")
+        return
+    if not value.strip():
+        report.error(name, path, f"{label} must not be empty.")
+        return
+    if len(value) > MAX_METADATA_VALUE_LENGTH:
+        report.error(name, path, f"{label} is {len(value)} characters; at most {MAX_METADATA_VALUE_LENGTH} are allowed.")
+    if any(ord(character) < 0x20 or ord(character) == 0x7F for character in value):
+        report.error(name, path, f"{label} contains control characters.")
+
+
+def validate_display_name(display_name: object, name: str, path: str, report: Report) -> None:
+    languages = ", ".join(f"`{language}`" for language in SUPPORTED_LANGUAGES)
+    if not isinstance(display_name, dict):
+        report.error(
+            name,
+            path,
+            f"`displayName` must be an object that maps each language code to the runner's name. Languages: {languages}.",
+        )
+        return
+
+    keys = set(display_name)
+    missing = [language for language in SUPPORTED_LANGUAGES if language not in keys]
+    unexpected = sorted(keys - set(SUPPORTED_LANGUAGES))
+    if missing:
+        report.error(
+            name,
+            path,
+            "`displayName` is missing language(s): "
+            + ", ".join(f"`{language}`" for language in missing)
+            + ". Every supported language is required; a machine translation is fine.",
+        )
+    if unexpected:
+        report.error(
+            name,
+            path,
+            "`displayName` has unsupported language(s): "
+            + ", ".join(f"`{language}`" for language in unexpected)
+            + f". Supported languages: {languages}.",
+        )
+
+    for language in SUPPORTED_LANGUAGES:
+        if language in keys:
+            validate_string_value(display_name[language], f"`displayName.{language}`", name, path, report)
 
 
 def validate_tags(tags: object, name: str, path: str, report: Report) -> None:
@@ -813,8 +855,11 @@ def describe_expected(name: str, filename: str) -> str:
     if filename == "metadata.json":
         return (
             'It holds the runner\'s `author`, `displayName`, `type`, and `tags`, e.g. '
-            '`{"author": "Your Name (YourGitHubID)", "displayName": "Display Name", '
-            '"type": "monochrome", "tags": ["animal"]}`.'
+            '`{"author": "Your Name (YourGitHubID)", "displayName": {"en": "Display Name", "ja": "表示名", ...}, '
+            '"type": "monochrome", "tags": ["animal"]}`. '
+            '`displayName` needs every supported language: '
+            + ", ".join(f"`{language}`" for language in SUPPORTED_LANGUAGES)
+            + "."
         )
     if filename == "preview.png":
         return "Every runner needs an animated PNG preview, 36px tall and at most 100px wide."

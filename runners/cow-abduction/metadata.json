@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Cow Abduction",
+  "displayName": {
+    "en": "Cow Abduction",
+    "de": "Entführte Kuh",
+    "es": "Vaca abducida",
+    "fr": "Vache enlevée",
+    "ja": "拐われる牛",
+    "ko": "납치되는 소",
+    "ru": "Похищаемая корова",
+    "vi": "Bò bị bắt cóc",
+    "zh-Hans": "被掳走的牛",
+    "zh-Hant": "被擄走的牛"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

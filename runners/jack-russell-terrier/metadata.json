@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Jack Russell Terrier",
+  "displayName": {
+    "en": "Jack Russell Terrier",
+    "de": "Jack Russell Terrier",
+    "es": "Jack Russell terrier",
+    "fr": "Jack Russell terrier",
+    "ja": "ジャック・ラッセル・テリア",
+    "ko": "잭 러셀 테리어",
+    "ru": "Джек-рассел-терьер",
+    "vi": "Chó Jack Russell Terrier",
+    "zh-Hans": "杰克罗素梗",
+    "zh-Hant": "傑克羅素㹴"
+  },
   "type": "monochrome",
   "tags": [
     "animal",

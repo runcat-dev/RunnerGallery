@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Record Player",
+  "displayName": {
+    "en": "Record Player",
+    "de": "Plattenspieler",
+    "es": "Tocadiscos",
+    "fr": "Tourne-disque",
+    "ja": "レコードプレーヤー",
+    "ko": "레코드 플레이어",
+    "ru": "Проигрыватель",
+    "vi": "Máy hát đĩa than",
+    "zh-Hans": "唱片机",
+    "zh-Hant": "唱片機"
+  },
   "type": "monochrome",
   "tags": [
     "object"

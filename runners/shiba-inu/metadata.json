@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Shiba Inu",
+  "displayName": {
+    "en": "Shiba Inu",
+    "de": "Shiba Inu",
+    "es": "Shiba inu",
+    "fr": "Shiba inu",
+    "ja": "柴犬",
+    "ko": "시바견",
+    "ru": "Сиба-ину",
+    "vi": "Chó Shiba Inu",
+    "zh-Hans": "柴犬",
+    "zh-Hant": "柴犬"
+  },
   "type": "monochrome",
   "tags": [
     "animal",

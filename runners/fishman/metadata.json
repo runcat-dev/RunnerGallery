@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Fishman",
+  "displayName": {
+    "en": "Fishman",
+    "de": "Fischmann",
+    "es": "Hombre pez",
+    "fr": "Homme-poisson",
+    "ja": "魚男",
+    "ko": "물고기 남자",
+    "ru": "Мужчина-рыба",
+    "vi": "Người đàn ông cá",
+    "zh-Hans": "鱼男",
+    "zh-Hant": "魚男"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

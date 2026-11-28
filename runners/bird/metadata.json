@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Bird",
+  "displayName": {
+    "en": "Bird",
+    "de": "Vogel",
+    "es": "Pájaro",
+    "fr": "Oiseau",
+    "ja": "トリ",
+    "ko": "새",
+    "ru": "Птица",
+    "vi": "Chim",
+    "zh-Hans": "鸟",
+    "zh-Hant": "鳥"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

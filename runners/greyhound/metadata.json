@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Greyhound",
+  "displayName": {
+    "en": "Greyhound",
+    "de": "Windhund",
+    "es": "Galgo",
+    "fr": "Lévrier",
+    "ja": "グレイハウンド",
+    "ko": "그레이하운드",
+    "ru": "Грейхаунд",
+    "vi": "Chó săn Greyhound",
+    "zh-Hans": "灵缇",
+    "zh-Hant": "靈緹犬"
+  },
   "type": "monochrome",
   "tags": [
     "animal",

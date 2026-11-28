@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Welsh Corgi",
+  "displayName": {
+    "en": "Welsh Corgi",
+    "de": "Welsh Corgi",
+    "es": "Corgi galés",
+    "fr": "Corgi gallois",
+    "ja": "ウェルシュ・コーギー",
+    "ko": "웰시 코기",
+    "ru": "Вельш-корги",
+    "vi": "Chó Corgi xứ Wales",
+    "zh-Hans": "威尔士柯基犬",
+    "zh-Hant": "威爾斯柯基犬"
+  },
   "type": "monochrome",
   "tags": [
     "animal",

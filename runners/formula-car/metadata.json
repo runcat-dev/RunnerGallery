@@ -1,6 +1,17 @@
 {
   "author": "Meerav Shah (Meerav29)",
-  "displayName": "Formula Car",
+  "displayName": {
+    "en": "Formula Car",
+    "de": "Formelauto",
+    "es": "Monoplaza de fórmula",
+    "fr": "Monoplace de formule",
+    "ja": "フォーミュラカー",
+    "ko": "포뮬러 카",
+    "ru": "Болид формулы",
+    "vi": "Xe đua công thức",
+    "zh-Hans": "方程式赛车",
+    "zh-Hant": "方程式賽車"
+  },
   "type": "monochrome",
   "tags": [
     "object"

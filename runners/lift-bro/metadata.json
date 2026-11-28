@@ -1,6 +1,17 @@
 {
   "author": "KentaroxKondo",
-  "displayName": "Lift Bro",
+  "displayName": {
+    "en": "Lift Bro",
+    "de": "Gym-Bro",
+    "es": "Tío del gym",
+    "fr": "Mec de la muscu",
+    "ja": "筋トレ野郎",
+    "ko": "헬스 브로",
+    "ru": "Качок",
+    "vi": "Gã tập tạ",
+    "zh-Hans": "举铁男",
+    "zh-Hant": "舉鐵男"
+  },
   "type": "monochrome",
   "tags": [
     "fitness"

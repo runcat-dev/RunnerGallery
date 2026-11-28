@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Dots",
+  "displayName": {
+    "en": "Dots",
+    "de": "Punkte",
+    "es": "Puntos",
+    "fr": "Points",
+    "ja": "ドット",
+    "ko": "점",
+    "ru": "Точки",
+    "vi": "Dấu chấm",
+    "zh-Hans": "圆点",
+    "zh-Hant": "圓點"
+  },
   "type": "monochrome",
   "tags": [
     "object"

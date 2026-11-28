@@ -1,6 +1,17 @@
 {
   "author": "Oren (oren-apono)",
-  "displayName": "Alien Wave",
+  "displayName": {
+    "en": "Alien Wave",
+    "de": "Alien-Welle",
+    "es": "Oleada alienígena",
+    "fr": "Vague d'aliens",
+    "ja": "エイリアンの襲来",
+    "ko": "외계인 습격",
+    "ru": "Волна пришельцев",
+    "vi": "Làn sóng người ngoài hành tinh",
+    "zh-Hans": "外星人来袭",
+    "zh-Hant": "外星人來襲"
+  },
   "type": "monochrome",
   "tags": []
 }

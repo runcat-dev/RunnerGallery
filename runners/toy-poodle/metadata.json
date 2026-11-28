@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Toy Poodle",
+  "displayName": {
+    "en": "Toy Poodle",
+    "de": "Toypudel",
+    "es": "Caniche toy",
+    "fr": "Caniche toy",
+    "ja": "トイ・プードル",
+    "ko": "토이 푸들",
+    "ru": "Той-пудель",
+    "vi": "Chó Poodle Toy",
+    "zh-Hans": "玩具贵宾犬",
+    "zh-Hant": "玩具貴賓犬"
+  },
   "type": "monochrome",
   "tags": [
     "animal",

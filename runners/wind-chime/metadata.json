@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Wind Chime",
+  "displayName": {
+    "en": "Wind Chime",
+    "de": "Windspiel",
+    "es": "Campanilla de viento",
+    "fr": "Carillon éolien",
+    "ja": "風鈴",
+    "ko": "풍경",
+    "ru": "Музыка ветра",
+    "vi": "Chuông gió",
+    "zh-Hans": "风铃",
+    "zh-Hant": "風鈴"
+  },
   "type": "monochrome",
   "tags": [
     "object"

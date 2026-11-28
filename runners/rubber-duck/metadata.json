@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Rubber Duck",
+  "displayName": {
+    "en": "Rubber Duck",
+    "de": "Quietscheente",
+    "es": "Patito de goma",
+    "fr": "Canard en caoutchouc",
+    "ja": "ラバーダック",
+    "ko": "고무 오리",
+    "ru": "Резиновая уточка",
+    "vi": "Vịt cao su",
+    "zh-Hans": "橡皮鸭",
+    "zh-Hant": "橡皮鴨"
+  },
   "type": "monochrome",
   "tags": [
     "object"

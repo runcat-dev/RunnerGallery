@@ -1,15 +1,18 @@
 const KNOWN_TAGS = ["animal", "dog", "object", "mechanism", "fitness"];
-const TABS = [
-  { type: "monochrome", label: "Monochrome" },
-  { type: "color", label: "Color" },
-];
+const TABS = ["monochrome", "color"];
 const DEFAULT_TAB = "monochrome";
 
 const state = {
+  language: detectLanguage(),
   tab: DEFAULT_TAB,
   tags: new Set(),
   runners: [],
+  statusKey: "loading",
 };
+
+function localized(key, replacements) {
+  return translate(state.language, key, replacements);
+}
 
 async function fetchJson(url) {
   const response = await fetch(url);
@@ -19,38 +22,98 @@ async function fetchJson(url) {
   return response.json();
 }
 
+function localizedDisplayName(runner) {
+  return runner.displayName[state.language] ?? runner.displayName[DEFAULT_LANGUAGE];
+}
+
 function createRunnerCard(runner) {
   const card = document.createElement("article");
   card.className = "runner-card";
+  const name = localizedDisplayName(runner);
 
   const preview = document.createElement("div");
   preview.className = "runner-preview";
   const previewImage = document.createElement("img");
   previewImage.src = `./runners/${runner.name}/preview.png`;
-  previewImage.alt = `${runner.displayName} animation preview`;
+  previewImage.alt = localized("previewAlt", { name });
   previewImage.loading = "lazy";
   preview.appendChild(previewImage);
 
   const displayName = document.createElement("p");
   displayName.className = "runner-name";
-  displayName.textContent = runner.displayName;
+  displayName.textContent = name;
 
   const author = document.createElement("p");
   author.className = "runner-author";
-  author.textContent = `by ${runner.author}`;
+  author.textContent = localized("byAuthor", { author: runner.author });
 
   const downloadLink = document.createElement("a");
   downloadLink.className = "download-button";
   downloadLink.href = `./runners/${runner.name}/${runner.name}-frames.zip`;
   downloadLink.setAttribute("download", "");
-  downloadLink.textContent = "Download";
+  downloadLink.textContent = localized("download");
 
   card.append(preview, displayName, author, downloadLink);
   return card;
 }
 
-async function loadGallery() {
+function setUpLanguageSelect() {
+  const select = document.getElementById("language-select");
+  select.replaceChildren(
+    ...LANGUAGES.map(({ code, label }) => {
+      const option = document.createElement("option");
+      option.value = code;
+      option.lang = code;
+      option.textContent = label;
+      return option;
+    }),
+  );
+  select.addEventListener("change", () => {
+    state.language = select.value;
+    writeLanguageToQuery();
+    applyLanguage();
+    if (state.runners.length > 0) render();
+  });
+}
+
+function writeLanguageToQuery() {
+  const params = new URLSearchParams(window.location.search);
+  params.set("lang", state.language);
+  history.replaceState(null, "", `${window.location.pathname}?${params}${window.location.hash}`);
+}
+
+function applyLanguage() {
+  document.documentElement.lang = state.language;
+  document.getElementById("language-select").value = state.language;
+  for (const element of document.querySelectorAll("[data-i18n]")) {
+    element.textContent = localized(element.dataset.i18n);
+  }
+  for (const element of document.querySelectorAll("[data-i18n-title]")) {
+    element.title = localized(element.dataset.i18nTitle);
+  }
+  for (const element of document.querySelectorAll("[data-i18n-aria-label]")) {
+    element.setAttribute("aria-label", localized(element.dataset.i18nAriaLabel));
+  }
+  renderContributeMessage();
+  renderStatus();
+}
+
+function renderContributeMessage() {
+  const message = document.getElementById("contribute-message");
+  const link = document.getElementById("contribute-link");
+  const [before, after = ""] = localized("contribute").split("{link}");
+  message.replaceChildren(before, link, after);
+}
+
+function renderStatus() {
   const statusElement = document.getElementById("gallery-status");
+  statusElement.hidden = state.statusKey === null;
+  if (state.statusKey !== null) {
+    statusElement.textContent = localized(state.statusKey);
+  }
+}
+
+async function loadGallery() {
   const filtersElement = document.getElementById("filters");
 
   let runnerNames;
@@ -58,7 +121,8 @@ async function loadGallery() {
     const manifest = await fetchJson("./runners/manifest.json");
     runnerNames = manifest.runners;
   } catch {
-    statusElement.textContent = "Failed to load the runner list. Please reload the page.";
+    state.statusKey = "loadFailed";
+    renderStatus();
     return;
   }
 
@@ -76,7 +140,8 @@ async function loadGallery() {
     .map((result) => result.value);
 
   if (state.runners.length === 0) {
-    statusElement.textContent = "No runners available yet.";
+    state.statusKey = "noRunners";
+    renderStatus();
     return;
   }
 
@@ -92,7 +157,7 @@ async function loadGallery() {
 function readStateFromHash() {
   const params = new URLSearchParams(window.location.hash.slice(1));
   const tab = params.get("tab");
-  state.tab = TABS.some((entry) => entry.type === tab) ? tab : DEFAULT_TAB;
+  state.tab = TABS.includes(tab) ? tab : DEFAULT_TAB;
   state.tags = new Set();
   const raw = params.get("tags");
   if (raw) {
@@ -131,14 +196,14 @@ function render() {
 function renderTabs() {
   const container = document.getElementById("tabs");
   container.replaceChildren();
-  for (const { type, label } of TABS) {
+  for (const type of TABS) {
     const count = state.runners.filter((runner) => runner.type === type).length;
     const button = document.createElement("button");
     button.type = "button";
     button.className = "tab" + (state.tab === type ? " active" : "");
     button.setAttribute("role", "tab");
     button.setAttribute("aria-selected", state.tab === type ? "true" : "false");
-    button.textContent = `${label} (${count})`;
+    button.textContent = `${localized(`type.${type}`)} (${count})`;
     button.addEventListener("click", () => {
       if (state.tab === type) return;
       state.tab = type;
@@ -160,7 +225,7 @@ function renderTagChips() {
     button.type = "button";
     button.className = "chip" + (isActive ? " active" : "");
     button.setAttribute("aria-pressed", isActive ? "true" : "false");
-    button.textContent = `${tag} (${count})`;
+    button.textContent = `${localized(`tag.${tag}`)} (${count})`;
     button.addEventListener("click", () => {
       if (isActive) state.tags.delete(tag);
       else state.tags.add(tag);
@@ -172,7 +237,7 @@ function renderTagChips() {
     const clearButton = document.createElement("button");
     clearButton.type = "button";
     clearButton.className = "chip chip-clear";
-    clearButton.textContent = "Clear";
+    clearButton.textContent = localized("clear");
     clearButton.addEventListener("click", () => {
       state.tags.clear();
       render();
@@ -183,15 +248,12 @@ function renderTagChips() {
 
 function renderGrid() {
   const grid = document.getElementById("runner-grid");
-  const statusElement = document.getElementById("gallery-status");
   const shown = state.runners.filter(isVisible);
   grid.replaceChildren(...shown.map(createRunnerCard));
-  if (shown.length === 0) {
-    statusElement.hidden = false;
-    statusElement.textContent = "No runners match the current filters.";
-  } else {
-    statusElement.hidden = true;
-  }
+  state.statusKey = shown.length === 0 ? "noMatch" : null;
+  renderStatus();
 }
 
+setUpLanguageSelect();
+applyLanguage();
 loadGallery();
