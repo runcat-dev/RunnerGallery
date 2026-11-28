@@ -36,6 +36,7 @@ Frame requirements:
 
 - Format: PNG, not interlaced
 - File name: `<runner-name>-frame-<N>.png`, numbered consecutively from `0`
+- Count: between 2 and 30 frames
 - Height: exactly 36px
 - Width: between 10px and 100px
 - All frames must have the same size

@@ -45,6 +45,7 @@ FRAME_HEIGHT = 36
 MIN_WIDTH = 10
 MAX_WIDTH = 100
 MIN_FRAMES = 2
+MAX_FRAMES = 30
 
 RUNNER_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
@@ -580,6 +581,14 @@ def validate_zip(root: Path, name: str, report: Report) -> None:
             name,
             path,
             f"The zip contains {len(frames)} frame(s). A runner animation needs at least {MIN_FRAMES}.",
+        )
+        return
+
+    if len(frames) > MAX_FRAMES:
+        report.error(
+            name,
+            path,
+            f"The zip contains {len(frames)} frames. A runner animation can have at most {MAX_FRAMES}.",
         )
         return
 
