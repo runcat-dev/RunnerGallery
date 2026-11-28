@@ -3,9 +3,10 @@
 
 Runs read-only against the git index. See CONTRIBUTING.md for the rules this
 enforces. The security-relevant part is that every byte of every distributed
-zip is proven to belong to a well-formed PNG: the archive may contain nothing
-but PNG files, and each PNG must consist entirely of CRC-valid chunks ending at
-IEND with no trailing bytes. That leaves nowhere to hide a payload.
+image is proven to belong to a well-formed PNG: a runner's `frames/` directory
+may contain nothing but PNG files, and each PNG must consist entirely of
+CRC-valid chunks ending at IEND with no trailing bytes. That leaves nowhere to
+hide a payload in the zip the gallery builds from those frames.
 """
 
 from __future__ import annotations
@@ -20,7 +21,6 @@ import struct
 import subprocess
 import sys
 import warnings
-import zipfile
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -29,15 +29,9 @@ from PIL import Image
 Image.MAX_IMAGE_PIXELS = 1_000_000
 warnings.simplefilter("error", Image.DecompressionBombWarning)
 
-MAX_ZIP_BYTES = 2 * 1024 * 1024
-MAX_TOTAL_UNCOMPRESSED = 8 * 1024 * 1024
-MAX_ENTRY_UNCOMPRESSED = 1 * 1024 * 1024
-MAX_ENTRIES = 64
-MAX_RATIO = 200
 MAX_PNG_BYTES = 512 * 1024
 MAX_TEXT_CHUNK_BYTES = 4 * 1024
 MAX_JSON_BYTES = 4 * 1024
-MAX_ENTRY_NAME_LENGTH = 200
 MAX_METADATA_VALUE_LENGTH = 100
 MAX_REPORTED_UNEXPECTED = 3
 
@@ -49,32 +43,22 @@ MAX_FRAMES = 30
 
 RUNNER_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
-EOCD_SIGNATURE = b"PK\x05\x06"
-EOCD_SIZE = 22
+REGULAR_FILE_MODE = "100644"
 
-ZIP_REGULAR_FILE = 0o100000
-ZIP_DIRECTORY = 0o040000
-ZIP_SYMLINK = 0o120000
-ZIP_FORMAT_MASK = 0o170000
+FRAMES_DIRECTORY = "frames"
+LEGACY_FRAMES_ARCHIVE = "{name}-frames.zip"
 
-DOS_HIDDEN = 0x02
-DOS_SYSTEM = 0x04
-
-REZIP_COMMAND = '`zip -r {name}-frames.zip {name}-frames -x "*.DS_Store" "__MACOSX/*"`'
-REZIP_HINT = "Re-create the zip from the terminal: " + REZIP_COMMAND
-
-# Phrased so that one reason reads correctly for either a single entry or many
+# Phrased so that one reason reads correctly for either a single file or many
 # ("`x` is macOS Finder metadata" / "`x`, `y` are macOS Finder metadata").
 JUNK_REASONS = {
-    "__MACOSX": "macOS Finder metadata. " + REZIP_HINT,
-    ".DS_Store": "macOS Finder metadata. " + REZIP_HINT,
-    "Thumbs.db": "Windows Explorer thumbnail cache data. Delete it and re-create the zip.",
-    "desktop.ini": "Windows folder-settings data. Delete it and re-create the zip.",
+    ".DS_Store": "macOS Finder metadata. Remove it from your commit.",
+    "Thumbs.db": "Windows Explorer thumbnail cache data. Remove it from your commit.",
+    "desktop.ini": "Windows folder-settings data. Remove it from your commit.",
 }
-APPLEDOUBLE_REASON = "macOS AppleDouble metadata. " + REZIP_HINT
-HIDDEN_REASON = "hidden. The archive must contain only the frame PNGs."
+APPLEDOUBLE_REASON = "macOS AppleDouble metadata. Remove it from your commit."
+HIDDEN_REASON = "hidden. The `frames/` directory must contain only the frame PNGs."
 
-EXPECTED_FILES = ("{name}-frames.zip", "metadata.json", "preview.png")
+EXPECTED_FILES = ("metadata.json", "preview.png")
 METADATA_KEYS = {"author", "displayName", "type", "tags"}
 METADATA_STRING_KEYS = {"author", "type"}
 SUPPORTED_LANGUAGES = ("en", "de", "es", "fr", "ja", "ko", "ru", "vi", "zh-Hans", "zh-Hant")
@@ -166,119 +150,6 @@ def runner_names_on_disk(tracked: dict[str, str]) -> list[str]:
         if len(parts) >= 3 and parts[0] == "runners":
             names.add(parts[1])
     return sorted(names)
-
-
-def check_entry_name(raw: str) -> str | None:
-    if "\x00" in raw:
-        return "contains a NUL byte"
-    if not raw.isascii():
-        return "contains non-ASCII characters"
-    if "\\" in raw:
-        return "contains a backslash (a Windows-style path separator)"
-    if raw.startswith("/"):
-        return "is an absolute path"
-    if len(raw) > 1 and raw[1] == ":":
-        return "contains a drive letter"
-    parts = raw.rstrip("/").split("/")
-    if any(part == ".." for part in parts):
-        return "escapes the archive root (`..`)"
-    if any(part in ("", ".") for part in parts):
-        return "contains an empty or `.` path component"
-    if len(raw) > MAX_ENTRY_NAME_LENGTH:
-        return "is unreasonably long"
-    return None
-
-
-def check_zip_container(data: bytes, runner: str, path: str, report: Report) -> bool:
-    index = data.rfind(EOCD_SIGNATURE)
-    if index < 0 or len(data) - index < EOCD_SIZE:
-        report.error(
-            runner, path, "Not a valid zip archive (no end-of-central-directory record)."
-        )
-        return False
-
-    cd_size, cd_offset = struct.unpack_from("<II", data, index + 12)
-    (comment_length,) = struct.unpack_from("<H", data, index + 20)
-    ok = True
-
-    if comment_length:
-        report.error(runner, path, "The zip has an archive comment. " + REZIP_HINT.format(name=runner))
-        ok = False
-
-    trailing = len(data) - (index + EOCD_SIZE + comment_length)
-    if trailing:
-        report.error(
-            runner,
-            path,
-            f"{trailing} bytes of data follow the end of the zip archive. A zip must "
-            "end at its central directory; extra bytes are how payloads get smuggled "
-            "into an otherwise valid archive.",
-        )
-        ok = False
-
-    if cd_offset == 0xFFFFFFFF or cd_size == 0xFFFFFFFF:
-        report.error(
-            runner,
-            path,
-            "This is a Zip64 archive. A runner frame archive should be a few tens of kilobytes.",
-        )
-        ok = False
-    elif cd_offset + cd_size != index:
-        report.error(
-            runner,
-            path,
-            "The central directory is not where the archive header says it is, so data "
-            "appears to be prepended to the zip (a self-extracting stub?).",
-        )
-        ok = False
-
-    return ok
-
-
-def check_entry_metadata(entry: zipfile.ZipInfo, runner: str, path: str, report: Report) -> bool:
-    ok = True
-    name = entry.filename
-
-    if entry.flag_bits & 0x1 or entry.flag_bits & 0x40:
-        report.error(runner, path, f"`{name}` is encrypted. Runner archives must not be password-protected.")
-        ok = False
-
-    if entry.compress_type not in (zipfile.ZIP_STORED, zipfile.ZIP_DEFLATED):
-        report.error(
-            runner,
-            path,
-            f"`{name}` uses compression method {entry.compress_type}; only stored and deflate are accepted.",
-        )
-        ok = False
-
-    is_directory = name.endswith("/")
-    mode = entry.external_attr >> 16
-
-    if mode:
-        # A zero format field means the writer only recorded permission bits
-        # (Python's zipfile.writestr does exactly this). Extractors treat that
-        # as a regular file, so only reject a format that is present and wrong.
-        file_format = mode & ZIP_FORMAT_MASK
-        if file_format and file_format not in (ZIP_REGULAR_FILE, ZIP_DIRECTORY):
-            kind = "symbolic link" if file_format == ZIP_SYMLINK else "special file"
-            report.error(runner, path, f"`{name}` is a {kind}. Only regular PNG files are allowed.")
-            ok = False
-        if mode & 0o7000:
-            report.error(runner, path, f"`{name}` has setuid, setgid, or sticky bits set.")
-            ok = False
-        if not is_directory and mode & 0o111:
-            report.error(runner, path, f"`{name}` has the executable bit set. Image files must not be executable.")
-            ok = False
-    else:
-        dos_attributes = entry.external_attr & 0xFF
-        if dos_attributes & DOS_HIDDEN:
-            report.error(runner, path, f"`{name}` is marked hidden.")
-            ok = False
-        if dos_attributes & DOS_SYSTEM:
-            report.error(runner, path, f"`{name}` is marked as a system file.")
-            ok = False
-
-    return ok
 
 
 def walk_png_chunks(data: bytes) -> list[tuple[str, int, bytes]]:
@@ -409,187 +280,63 @@ def check_png(
     return width, height
 
 
-def classify_unexpected_entry(name: str, runner: str) -> str:
-    """The reason an entry is rejected, phrased so several entries sharing a
-    reason can be reported together. Contributors hit these in batches — a zip
-    carries one `._x` per frame — so one message per reason beats one per file.
+def classify_unexpected_frame_file(filename: str, runner: str) -> str:
+    """The reason a file is rejected, phrased so several files sharing a
+    reason can be reported together. Contributors hit these in batches — a
+    copy from a macOS volume can carry one `._x` per frame — so one message per
+    reason beats one per file.
     """
-    base = name.rstrip("/").split("/")[-1]
-    top = name.split("/")[0]
-    for junk, reason in JUNK_REASONS.items():
-        if base == junk or top == junk:
-            return reason.format(name=runner)
-    if base.startswith("._"):
-        return APPLEDOUBLE_REASON.format(name=runner)
-    if base.startswith("."):
+    if filename in JUNK_REASONS:
+        return JUNK_REASONS[filename]
+    if filename.startswith("._"):
+        return APPLEDOUBLE_REASON
+    if filename.startswith("."):
         return HIDDEN_REASON
-    return f"not allowed here. The archive must contain only `{runner}-frames/{runner}-frame-N.png` files."
+    return f"not allowed here. The `frames/` directory must contain only `{runner}-frame-N.png` files."
 
 
-def report_unexpected_entries(runner: str, path: str, grouped: dict[str, list[str]], report: Report) -> None:
-    for reason, names in grouped.items():
-        shown = ", ".join(f"`{entry}`" for entry in names[:MAX_REPORTED_UNEXPECTED])
-        remainder = len(names) - MAX_REPORTED_UNEXPECTED
+def report_unexpected_frame_files(runner: str, path: str, grouped: dict[str, list[str]], report: Report) -> None:
+    for reason, filenames in grouped.items():
+        shown = ", ".join(f"`{filename}`" for filename in filenames[:MAX_REPORTED_UNEXPECTED])
+        remainder = len(filenames) - MAX_REPORTED_UNEXPECTED
         if remainder > 0:
             shown += f" and {remainder} more"
-        verb = "is" if len(names) == 1 else "are"
+        verb = "is" if len(filenames) == 1 else "are"
         report.error(runner, path, f"{shown} {verb} {reason}")
 
 
-def validate_zip(root: Path, name: str, report: Report) -> None:
-    path = f"runners/{name}/{name}-frames.zip"
-    data = (root / path).read_bytes()
+def validate_frames(root: Path, name: str, frame_paths: list[str], report: Report) -> None:
+    directory_path = f"runners/{name}/{FRAMES_DIRECTORY}"
+    frame_re = re.compile(rf"^{re.escape(name)}-frame-(0|[1-9][0-9]*)\.png$")
 
-    if len(data) > MAX_ZIP_BYTES:
-        report.error(
-            name,
-            path,
-            f"The zip is {len(data)} bytes. Runner frame archives are a few tens of kilobytes; "
-            "this is implausibly large.",
-        )
-        return
-
-    if not check_zip_container(data, name, path, report):
-        return
-
-    try:
-        archive = zipfile.ZipFile(io.BytesIO(data))
-    except zipfile.BadZipFile as error:
-        report.error(name, path, f"The zip could not be opened: {error}.")
-        return
-
-    entries = archive.infolist()
-    if len(entries) > MAX_ENTRIES:
-        report.error(name, path, f"The zip has {len(entries)} entries; at most {MAX_ENTRIES} are allowed.")
-        return
-
-    root_directory = f"{name}-frames/"
-    frame_re = re.compile(rf"^{re.escape(name)}-frame-(\d+)\.png$")
-
-    # Reported as one message rather than as an unexpected-entry error per file,
-    # which for a 30-frame runner would bury the actual problem.
-    if not any(entry.filename.startswith(root_directory) for entry in entries):
-        report.error(
-            name,
-            path,
-            f"The zip has no `{root_directory}` directory; its {len(entries)} entries sit at the "
-            f"root of the archive. Zip the `{root_directory}` directory itself, not its contents: "
-            + REZIP_COMMAND.format(name=name),
-        )
-        return
-
-    frames: dict[int, tuple[str, bytes]] = {}
-    total_uncompressed = 0
-    top_levels: set[str] = set()
+    frames: dict[int, tuple[str, str]] = {}
     unexpected: dict[str, list[str]] = {}
-    entries_ok = True
 
-    for entry in entries:
-        entry_name = entry.filename
-
-        name_problem = check_entry_name(entry_name)
-        if name_problem is not None:
-            report.error(name, path, f"The zip entry `{entry_name}` {name_problem}.")
-            entries_ok = False
-            continue
-
-        if not check_entry_metadata(entry, name, path, report):
-            entries_ok = False
-            continue
-
-        top_levels.add(entry_name.split("/")[0])
-
-        if entry_name == root_directory:
-            continue
-
-        base = entry_name[len(root_directory) :] if entry_name.startswith(root_directory) else None
-        match = frame_re.match(base) if base else None
-
+    for path in sorted(frame_paths):
+        filename = path.rsplit("/", 1)[-1]
+        match = frame_re.match(filename)
         if match is None:
-            unexpected.setdefault(classify_unexpected_entry(entry_name, name), []).append(entry_name)
-            entries_ok = False
+            unexpected.setdefault(classify_unexpected_frame_file(filename, name), []).append(filename)
             continue
+        frames[int(match.group(1))] = (filename, path)
 
-        if entry.file_size > MAX_ENTRY_UNCOMPRESSED:
-            report.error(name, path, f"`{entry_name}` expands to {entry.file_size} bytes, which is implausibly large.")
-            entries_ok = False
-            continue
-
-        ratio = entry.file_size / max(entry.compress_size, 1)
-        if ratio > MAX_RATIO:
-            report.error(
-                name,
-                path,
-                f"`{entry_name}` has a compression ratio of {ratio:.0f}:1, which suggests a zip bomb.",
-            )
-            entries_ok = False
-            continue
-
-        try:
-            blob = archive.read(entry)
-        except Exception as error:
-            report.error(name, path, f"`{entry_name}` could not be extracted: {error}.")
-            entries_ok = False
-            continue
-
-        # The local header can lie about file_size; this is what actually caps a bomb.
-        if len(blob) != entry.file_size:
-            report.error(
-                name,
-                path,
-                f"`{entry_name}` expanded to {len(blob)} bytes but the zip header declares "
-                f"{entry.file_size}. The archive is malformed.",
-            )
-            entries_ok = False
-            continue
-
-        total_uncompressed += len(blob)
-        if total_uncompressed > MAX_TOTAL_UNCOMPRESSED:
-            report.error(name, path, "The zip expands to more than 8 MB in total, which suggests a zip bomb.")
-            return
-
-        index = int(match.group(1))
-        if index in frames:
-            report.error(
-                name,
-                path,
-                f"`{entry_name}` and `{root_directory}{frames[index][0]}` are both frame {index}.",
-            )
-            entries_ok = False
-            continue
-        frames[index] = (base, blob)
-
-    report_unexpected_entries(name, path, unexpected, report)
-
-    if len(top_levels) > 1:
-        listed = sorted(top_levels)[:MAX_REPORTED_UNEXPECTED]
-        suffix = ", ..." if len(top_levels) > MAX_REPORTED_UNEXPECTED else ""
-        report.error(
-            name,
-            path,
-            f"The zip has {len(top_levels)} top-level entries ("
-            + ", ".join(f"`{top}`" for top in listed)
-            + suffix
-            + f"). It must contain a single `{root_directory}` directory.",
-        )
-        return
-
-    if not entries_ok:
+    report_unexpected_frame_files(name, directory_path, unexpected, report)
+    if unexpected:
         return
 
     if len(frames) < MIN_FRAMES:
         report.error(
             name,
-            path,
-            f"The zip contains {len(frames)} frame(s). A runner animation needs at least {MIN_FRAMES}.",
+            directory_path,
+            f"`frames/` contains {len(frames)} frame(s). A runner animation needs at least {MIN_FRAMES}.",
         )
         return
 
     if len(frames) > MAX_FRAMES:
         report.error(
             name,
-            path,
-            f"The zip contains {len(frames)} frames. A runner animation can have at most {MAX_FRAMES}.",
+            directory_path,
+            f"`frames/` contains {len(frames)} frames. A runner animation can have at most {MAX_FRAMES}.",
         )
         return
 
@@ -604,8 +351,8 @@ def validate_zip(root: Path, name: str, report: Report) -> None:
             details.append("unexpected " + ", ".join(f"`{name}-frame-{i}.png`" for i in extra))
         report.error(
             name,
-            path,
-            f"Frames must be numbered consecutively from 0 to {len(frames) - 1}, but the archive has "
+            directory_path,
+            f"Frames must be numbered consecutively from 0 to {len(frames) - 1}, but `frames/` has "
             + " and ".join(details)
             + ".",
         )
@@ -613,10 +360,10 @@ def validate_zip(root: Path, name: str, report: Report) -> None:
 
     sizes: dict[tuple[int, int], str] = {}
     for index in sorted(frames):
-        base, blob = frames[index]
+        filename, path = frames[index]
         size = check_png(
-            blob,
-            label=f"Frame `{base}`",
+            (root / path).read_bytes(),
+            label=f"Frame `{filename}`",
             path=path,
             runner=name,
             report=report,
@@ -629,19 +376,19 @@ def validate_zip(root: Path, name: str, report: Report) -> None:
             report.error(
                 name,
                 path,
-                f"Frame `{base}` is {width}x{height}. Every frame must be exactly {FRAME_HEIGHT}px tall.",
+                f"Frame `{filename}` is {width}x{height}. Every frame must be exactly {FRAME_HEIGHT}px tall.",
             )
         if not MIN_WIDTH <= width <= MAX_WIDTH:
             report.error(
                 name,
                 path,
-                f"Frame `{base}` is {width}px wide. Frames must be between {MIN_WIDTH}px and {MAX_WIDTH}px wide.",
+                f"Frame `{filename}` is {width}px wide. Frames must be between {MIN_WIDTH}px and {MAX_WIDTH}px wide.",
             )
-        sizes.setdefault(size, base)
+        sizes.setdefault(size, filename)
 
     if len(sizes) > 1:
-        listed = ", ".join(f"{w}x{h} (e.g. `{base}`)" for (w, h), base in sorted(sizes.items()))
-        report.error(name, path, f"Frames have different sizes: {listed}. All frames must share one size.")
+        listed = ", ".join(f"{w}x{h} (e.g. `{filename}`)" for (w, h), filename in sorted(sizes.items()))
+        report.error(name, directory_path, f"Frames have different sizes: {listed}. All frames must share one size.")
 
 
 def validate_metadata(root: Path, name: str, report: Report) -> None:
@@ -796,31 +543,45 @@ def validate_preview(root: Path, name: str, report: Report) -> None:
         report.error(name, path, f"`preview.png` is {width}px wide. It must be at most {MAX_WIDTH}px wide.")
 
 
-def validate_directory_contents(name: str, tracked: dict[str, str], report: Report) -> set[str]:
+def validate_directory_contents(name: str, tracked: dict[str, str], report: Report) -> tuple[set[str], list[str]]:
     prefix = f"runners/{name}/"
+    frames_prefix = f"{FRAMES_DIRECTORY}/"
     present: set[str] = set()
+    frame_paths: list[str] = []
     directory_path = f"runners/{name}"
 
     for path, mode in tracked.items():
         if not path.startswith(prefix):
             continue
         relative = path[len(prefix) :]
-        if "/" in relative:
-            report.error(
-                name,
-                path,
-                f"`{relative}` is inside a subdirectory. A runner directory holds exactly three files, flat.",
-            )
-            continue
-        present.add(relative)
         if mode == "120000":
             report.error(name, path, f"`{relative}` is committed as a symbolic link. It must be a regular file.")
         elif mode == "100755":
             report.error(name, path, f"`{relative}` is committed with the executable bit set. Run `chmod 644` on it.")
-        elif mode != "100644":
+        elif mode != REGULAR_FILE_MODE:
             report.error(name, path, f"`{relative}` has an unexpected git mode ({mode}). It must be a regular file.")
 
-    expected = {template.format(name=name) for template in EXPECTED_FILES}
+        if relative.startswith(frames_prefix):
+            if "/" in relative[len(frames_prefix) :]:
+                report.error(
+                    name,
+                    path,
+                    f"`{relative}` is inside a subdirectory of `frames/`. Put every frame directly in `frames/`.",
+                )
+            else:
+                frame_paths.append(path)
+            present.add(FRAMES_DIRECTORY)
+            continue
+        if "/" in relative:
+            report.error(
+                name,
+                path,
+                f"`{relative}` is inside a subdirectory. Only `frames/` may be a subdirectory of a runner directory.",
+            )
+            continue
+        present.add(relative)
+
+    expected = set(EXPECTED_FILES) | {FRAMES_DIRECTORY}
     missing = expected - present
     unexpected = present - expected
 
@@ -835,20 +596,32 @@ def validate_directory_contents(name: str, tracked: dict[str, str], report: Repo
         missing.discard("preview.png")
         unexpected.discard("preview.gif")
 
+    legacy_archive = LEGACY_FRAMES_ARCHIVE.format(name=name)
+    if legacy_archive in unexpected:
+        report.error(
+            name,
+            f"{prefix}{legacy_archive}",
+            f"Frames are no longer submitted as a zip. Delete `{legacy_archive}` and commit its PNGs "
+            f"directly as `frames/{name}-frame-N.png`; the gallery builds the downloadable zip itself.",
+        )
+        missing.discard(FRAMES_DIRECTORY)
+        unexpected.discard(legacy_archive)
+
     for filename in sorted(missing):
-        report.error(name, f"{prefix}{filename}", f"`{filename}` is missing. " + describe_expected(name, filename))
+        shown = f"{filename}/" if filename == FRAMES_DIRECTORY else filename
+        report.error(name, f"{prefix}{filename}", f"`{shown}` is missing. " + describe_expected(name, filename))
     for filename in sorted(unexpected):
         report.error(
             name,
             f"{prefix}{filename}",
             f"`{filename}` does not belong here. A runner directory contains exactly "
-            f"`{name}-frames.zip`, `metadata.json`, and `preview.png`.",
+            "`metadata.json`, `preview.png`, and a `frames/` directory.",
         )
 
     if not present:
         report.error(name, directory_path, "The runner directory is empty.")
 
-    return present
+    return present, frame_paths
 
 
 def describe_expected(name: str, filename: str) -> str:
@@ -863,7 +636,7 @@ def describe_expected(name: str, filename: str) -> str:
         )
     if filename == "preview.png":
         return "Every runner needs an animated PNG preview, 36px tall and at most 100px wide."
-    return f"It holds the animation frames as `{name}-frames/{name}-frame-N.png`."
+    return f"It holds the animation frames as `frames/{name}-frame-N.png`."
 
 
 def validate_runner(root: Path, name: str, tracked: dict[str, str], report: Report) -> None:
@@ -878,10 +651,10 @@ def validate_runner(root: Path, name: str, tracked: dict[str, str], report: Repo
         )
         return
 
-    present = validate_directory_contents(name, tracked, report)
+    present, frame_paths = validate_directory_contents(name, tracked, report)
 
-    if f"{name}-frames.zip" in present:
-        validate_zip(root, name, report)
+    if FRAMES_DIRECTORY in present and all(tracked[path] == REGULAR_FILE_MODE for path in frame_paths):
+        validate_frames(root, name, frame_paths, report)
     if "metadata.json" in present:
         validate_metadata(root, name, report)
     if "preview.png" in present:
@@ -1018,16 +791,15 @@ def emit_step_summary(report: Report, out) -> None:
             out.write("✅ No runner was changed by this pull request; only the manifest was checked.\n")
             return
         passed = plural(len(report.checked), "runner")
-        out.write(f"✅ **{passed} passed** — archive contents, PNG integrity, and spec conformance.\n\n")
+        out.write(f"✅ **{passed} passed** — frame files, PNG integrity, and spec conformance.\n\n")
         out.write("<details><summary>What was checked</summary>\n\n")
         out.write(
-            "- Each `*-frames.zip` contains only PNG frames under a single `<name>-frames/` directory — "
-            "no symlinks, no executables, no encrypted or Finder-generated entries, and no data appended "
-            "to the archive.\n"
+            "- Each runner's `frames/` directory contains only `<name>-frame-N.png` files — no symlinks, "
+            "no executables, no nested directories, and no Finder-generated files.\n"
             "- Every PNG was fully decoded and proven to consist entirely of valid PNG chunks with correct "
             "CRCs, ending at `IEND` with no trailing bytes. There is nowhere in these files for an "
             "executable payload to hide.\n"
-            "- Every frame is exactly 36px tall, 10–100px wide, and all frames in an archive share one size.\n"
+            "- Every frame is exactly 36px tall, 10–100px wide, and all frames of a runner share one size.\n"
             "- `metadata.json`, `preview.png` (an APNG), and `manifest.json` match each runner directory.\n"
         )
         out.write("\n</details>\n")

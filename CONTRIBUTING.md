@@ -11,26 +11,23 @@ Use a lowercase, hyphen-separated name (e.g., `welsh-corgi`). This name is used 
 
 ### 2. Prepare the files
 
-Place the following three files in `runners/<runner-name>/`:
+Place the following files in `runners/<runner-name>/`:
 
 ```
 runners/
 └── <runner-name>/
-    ├── <runner-name>-frames.zip
+    ├── frames/
+    │   ├── <runner-name>-frame-0.png
+    │   ├── <runner-name>-frame-1.png
+    │   └── ...
     ├── metadata.json
     └── preview.png
 ```
 
-#### `<runner-name>-frames.zip`
+#### `frames/`
 
-A zip archive of a `<runner-name>-frames/` directory containing the animation frames:
-
-```
-<runner-name>-frames/
-├── <runner-name>-frame-0.png
-├── <runner-name>-frame-1.png
-└── ...
-```
+The animation frames, committed as individual PNG files.
+Do not zip them; the gallery builds the downloadable zip from these files and `metadata.json`.
 
 Frame requirements:
 
@@ -41,13 +38,7 @@ Frame requirements:
 - Width: between 10px and 100px
 - All frames must have the same size
 - A transparent background is recommended
-- The zip must contain nothing but the frames — no Finder-generated files such as `.DS_Store`, `__MACOSX/`, or `._*`
-
-Tip for macOS users — creating the zip from the command line avoids Finder-generated junk:
-
-```sh
-zip -r <runner-name>-frames.zip <runner-name>-frames -x "*.DS_Store" "__MACOSX/*"
-```
+- `frames/` must contain nothing but the frames — no Finder-generated files such as `.DS_Store` or `._*`
 
 #### `metadata.json`
 
@@ -120,7 +111,7 @@ Add your runner name to `runners/manifest.json`. Keep the list sorted alphabetic
 
 ### 4. Check your runner locally
 
-Every Pull Request is automatically checked: the frame archive must contain nothing but your frames, and every image must be a genuine, fully decodable PNG.
+Every Pull Request is automatically checked: `frames/` must contain nothing but your frames, and every image must be a genuine, fully decodable PNG.
 You can run exactly the same checks yourself before pushing, so that you do not have to wait for CI:
 
 ```sh
