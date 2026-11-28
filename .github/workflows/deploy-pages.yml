@@ -17,7 +17,7 @@ jobs:
   # validate-runners.yml. Only the deploy job below can publish the site.
   build:
     name: Build site
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
@@ -43,7 +43,7 @@ jobs:
   deploy:
     name: Deploy site
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     timeout-minutes: 10
     permissions:
       pages: write
