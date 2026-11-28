@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Dolphin",
+  "displayName": {
+    "en": "Dolphin",
+    "de": "Delfin",
+    "es": "Delfín",
+    "fr": "Dauphin",
+    "ja": "イルカ",
+    "ko": "돌고래",
+    "ru": "Дельфин",
+    "vi": "Cá heo",
+    "zh-Hans": "海豚",
+    "zh-Hant": "海豚"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

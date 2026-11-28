@@ -54,11 +54,26 @@ zip -r <runner-name>-frames.zip <runner-name>-frames -x "*.DS_Store" "__MACOSX/*
 ```json
 {
   "author": "Your Name (YourGitHubID)",
-  "displayName": "Display Name",
+  "displayName": {
+    "en": "Rabbit",
+    "de": "Kaninchen",
+    "es": "Conejo",
+    "fr": "Lapin",
+    "ja": "ウサギ",
+    "ko": "토끼",
+    "ru": "Кролик",
+    "vi": "Thỏ",
+    "zh-Hans": "兔子",
+    "zh-Hant": "兔子"
+  },
   "type": "monochrome",
   "tags": ["animal"]
 }
 ```
+
+`displayName` is the runner's name in every language the gallery supports, keyed by language code.
+All ten languages are required: `en`, `de`, `es`, `fr`, `ja`, `ko`, `ru`, `vi`, `zh-Hans`, and `zh-Hant`.
+If you are not fluent in some of them, a machine translation is fine.
 
 `type` must be one of:
 
@@ -77,9 +92,10 @@ zip -r <runner-name>-frames.zip <runner-name>-frames -x "*.DS_Store" "__MACOSX/*
 
 Guidelines:
 
-- Human-shaped characters do not receive `animal`. If nothing fits, use an empty array `[]`.
+- A runner PR may only use tags from the table above. If nothing fits, use an empty array `[]`.
+- Human-shaped characters do not receive `animal`.
 - Prefer fewer tags when unsure. Extra tags can always be added later.
-- Adding a new tag needs to be proposed in a separate PR that updates both this document and `KNOWN_TAGS` in `.github/scripts/validate_runners.py`.
+- A new tag must be proposed in its own PR, separate from any runner PR. That PR updates this table, `KNOWN_TAGS` in both `.github/scripts/validate_runners.py` and `script.js`, and the tag's label for every language in `i18n.js`.
 
 #### `preview.png`
 

@@ -1,6 +1,17 @@
 {
   "author": "Meerav Shah (Meerav29)",
-  "displayName": "Cutting Chai",
+  "displayName": {
+    "en": "Cutting Chai",
+    "de": "Cutting Chai",
+    "es": "Cutting chai",
+    "fr": "Cutting chai",
+    "ja": "カッティングチャイ",
+    "ko": "커팅 차이",
+    "ru": "Каттинг-чай",
+    "vi": "Cutting Chai",
+    "zh-Hans": "印度奶茶",
+    "zh-Hant": "印度奶茶"
+  },
   "type": "monochrome",
   "tags": [
     "object"

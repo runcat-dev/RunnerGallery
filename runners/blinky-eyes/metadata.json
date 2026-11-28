@@ -1,6 +1,17 @@
 {
   "author": "Lorenz Rosenbohm (neonduplex)",
-  "displayName": "Blinky Eyes",
+  "displayName": {
+    "en": "Blinky Eyes",
+    "de": "Blinzelnde Augen",
+    "es": "Ojos parpadeantes",
+    "fr": "Yeux clignotants",
+    "ja": "まばたきする目",
+    "ko": "깜빡이는 눈",
+    "ru": "Моргающие глаза",
+    "vi": "Mắt chớp chớp",
+    "zh-Hans": "眨眼睛",
+    "zh-Hant": "眨眼睛"
+  },
   "type": "color",
   "tags": []
 }

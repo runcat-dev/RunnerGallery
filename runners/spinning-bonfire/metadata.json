@@ -1,6 +1,17 @@
 {
   "author": "kujira-wak",
-  "displayName": "Spinning Bonfire",
+  "displayName": {
+    "en": "Spinning Bonfire",
+    "de": "Flackerndes Lagerfeuer",
+    "es": "Hoguera titilante",
+    "fr": "Feu de camp vacillant",
+    "ja": "ゆらめく焚き火",
+    "ko": "일렁이는 모닥불",
+    "ru": "Мерцающий костёр",
+    "vi": "Lửa trại bập bùng",
+    "zh-Hans": "摇曳的篝火",
+    "zh-Hant": "搖曳的營火"
+  },
   "type": "color",
   "tags": [
     "object"

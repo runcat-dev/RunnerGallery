@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Rabbit",
+  "displayName": {
+    "en": "Rabbit",
+    "de": "Kaninchen",
+    "es": "Conejo",
+    "fr": "Lapin",
+    "ja": "ウサギ",
+    "ko": "토끼",
+    "ru": "Кролик",
+    "vi": "Thỏ",
+    "zh-Hans": "兔子",
+    "zh-Hant": "兔子"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

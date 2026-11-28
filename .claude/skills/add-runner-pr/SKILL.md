@@ -33,6 +33,9 @@ file runners/<name>/preview.png
 ```
 
 `Read` `metadata.json` and confirm `author`, `displayName`, `type` (`monochrome` or `color`), and `tags` are all present and correct.
+`displayName` must be an object with a name for every language: `en`, `de`, `es`, `fr`, `ja`, `ko`, `ru`, `vi`, `zh-Hans`, and `zh-Hant`.
+If some languages are missing, propose translations to the user and fill them in after approval.
+`tags` may only use tags already in `KNOWN_TAGS`; if none fits, use `[]`. Never introduce a new tag in a runner PR — that needs its own PR.
 
 If anything violates the spec (width out of range, height not 36, junk files inside the zip, etc.), **send the asset back to the user for fixing**. Do not loosen the spec ([[runner-spec-is-absolute]]).
 

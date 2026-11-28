@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Chihuahua",
+  "displayName": {
+    "en": "Chihuahua",
+    "de": "Chihuahua",
+    "es": "Chihuahua",
+    "fr": "Chihuahua",
+    "ja": "チワワ",
+    "ko": "치와와",
+    "ru": "Чихуахуа",
+    "vi": "Chó Chihuahua",
+    "zh-Hans": "吉娃娃",
+    "zh-Hant": "吉娃娃"
+  },
   "type": "monochrome",
   "tags": [
     "animal",

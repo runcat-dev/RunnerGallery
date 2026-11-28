@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Border Collie",
+  "displayName": {
+    "en": "Border Collie",
+    "de": "Border Collie",
+    "es": "Border collie",
+    "fr": "Border collie",
+    "ja": "ボーダー・コリー",
+    "ko": "보더 콜리",
+    "ru": "Бордер-колли",
+    "vi": "Chó Border Collie",
+    "zh-Hans": "边境牧羊犬",
+    "zh-Hant": "邊境牧羊犬"
+  },
   "type": "monochrome",
   "tags": [
     "animal",

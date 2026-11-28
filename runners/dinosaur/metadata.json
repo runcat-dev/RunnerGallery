@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Dinosaur",
+  "displayName": {
+    "en": "Dinosaur",
+    "de": "Dinosaurier",
+    "es": "Dinosaurio",
+    "fr": "Dinosaure",
+    "ja": "恐竜",
+    "ko": "공룡",
+    "ru": "Динозавр",
+    "vi": "Khủng long",
+    "zh-Hans": "恐龙",
+    "zh-Hant": "恐龍"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

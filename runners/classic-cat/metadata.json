@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Classic Cat",
+  "displayName": {
+    "en": "Classic Cat",
+    "de": "Klassische Katze",
+    "es": "Gato clásico",
+    "fr": "Chat classique",
+    "ja": "クラシックネコ",
+    "ko": "클래식 고양이",
+    "ru": "Классический кот",
+    "vi": "Mèo cổ điển",
+    "zh-Hans": "经典猫",
+    "zh-Hant": "經典貓"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

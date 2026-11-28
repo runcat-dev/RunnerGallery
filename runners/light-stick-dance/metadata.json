@@ -1,6 +1,17 @@
 {
   "author": "Lee Hyun Woo (cbnuleehyunwoo)",
-  "displayName": "Light Stick Dance",
+  "displayName": {
+    "en": "Light Stick Dance",
+    "de": "Leuchtstab-Tanz",
+    "es": "Baile con barras de luz",
+    "fr": "Danse aux bâtons lumineux",
+    "ja": "ヲタ芸",
+    "ko": "응원봉 댄스",
+    "ru": "Танец со световыми палочками",
+    "vi": "Nhảy gậy phát sáng",
+    "zh-Hans": "荧光棒舞",
+    "zh-Hant": "螢光棒舞"
+  },
   "type": "color",
   "tags": []
 }

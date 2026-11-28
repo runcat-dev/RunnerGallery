@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Otter",
+  "displayName": {
+    "en": "Otter",
+    "de": "Otter",
+    "es": "Nutria",
+    "fr": "Loutre",
+    "ja": "カワウソ",
+    "ko": "수달",
+    "ru": "Выдра",
+    "vi": "Rái cá",
+    "zh-Hans": "水獭",
+    "zh-Hant": "水獺"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

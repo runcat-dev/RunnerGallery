@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Dachshund",
+  "displayName": {
+    "en": "Dachshund",
+    "de": "Dackel",
+    "es": "Dachshund",
+    "fr": "Teckel",
+    "ja": "ダックスフンド",
+    "ko": "닥스훈트",
+    "ru": "Такса",
+    "vi": "Chó Dachshund",
+    "zh-Hans": "腊肠犬",
+    "zh-Hant": "臘腸犬"
+  },
   "type": "monochrome",
   "tags": [
     "animal",

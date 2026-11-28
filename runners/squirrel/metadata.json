@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Squirrel",
+  "displayName": {
+    "en": "Squirrel",
+    "de": "Eichhörnchen",
+    "es": "Ardilla",
+    "fr": "Écureuil",
+    "ja": "リス",
+    "ko": "다람쥐",
+    "ru": "Белка",
+    "vi": "Sóc",
+    "zh-Hans": "松鼠",
+    "zh-Hant": "松鼠"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

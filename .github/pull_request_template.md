@@ -21,6 +21,7 @@
 - [ ] Files are placed at `runners/<runner-name>/` as `<runner-name>-frames.zip`, `metadata.json`, and `preview.png`.
 - [ ] All frames are PNG files named `<runner-name>-frame-<N>.png` (numbered from 0), between 2 and 30 frames, with a height of exactly 36px, a width between 10px and 100px, and all frames share the same size.
 - [ ] The zip contains only the frames — no `.DS_Store`, `__MACOSX/`, or `._*` entries.
-- [ ] `metadata.json` contains the correct `author`, `displayName`, `type` (`monochrome` or `color`), and `tags`.
+- [ ] `metadata.json` contains the correct `author`, `displayName` (in all 10 languages), `type` (`monochrome` or `color`), and `tags`.
+- [ ] `tags` only uses existing tags, or is empty if none fits. New tags are proposed in a separate PR.
 - [ ] `preview.png` is an animated PNG (APNG), 36px tall, at most 100px wide, and animates correctly.
 - [ ] `runners/manifest.json` includes the new runner name and stays sorted alphabetically.

@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Dogeza",
+  "displayName": {
+    "en": "Dogeza",
+    "de": "Dogeza",
+    "es": "Dogeza",
+    "fr": "Dogeza",
+    "ja": "土下座",
+    "ko": "도게자",
+    "ru": "Догэдза",
+    "vi": "Dogeza",
+    "zh-Hans": "土下座",
+    "zh-Hant": "土下座"
+  },
   "type": "monochrome",
   "tags": []
 }

@@ -1,6 +1,17 @@
 {
   "author": "Ryan Token (ryan-token)",
-  "displayName": "Swift Bird",
+  "displayName": {
+    "en": "Swift Bird",
+    "de": "Mauersegler",
+    "es": "Vencejo",
+    "fr": "Martinet",
+    "ja": "アマツバメ",
+    "ko": "칼새",
+    "ru": "Стриж",
+    "vi": "Chim yến",
+    "zh-Hans": "雨燕",
+    "zh-Hant": "雨燕"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

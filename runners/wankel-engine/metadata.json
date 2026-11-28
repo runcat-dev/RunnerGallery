@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Wankel Engine",
+  "displayName": {
+    "en": "Wankel Engine",
+    "de": "Wankelmotor",
+    "es": "Motor Wankel",
+    "fr": "Moteur Wankel",
+    "ja": "ロータリーエンジン",
+    "ko": "반켈 엔진",
+    "ru": "Двигатель Ванкеля",
+    "vi": "Động cơ Wankel",
+    "zh-Hans": "转子发动机",
+    "zh-Hant": "轉子引擎"
+  },
   "type": "monochrome",
   "tags": [
     "object",

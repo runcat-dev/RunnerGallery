@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Flash Cat",
+  "displayName": {
+    "en": "Flash Cat",
+    "de": "Rote Blitzkatze",
+    "es": "Gato relámpago rojo",
+    "fr": "Chat éclair rouge",
+    "ja": "赤い閃光ネコ",
+    "ko": "붉은 번개 고양이",
+    "ru": "Красный кот-молния",
+    "vi": "Mèo tia chớp đỏ",
+    "zh-Hans": "红色闪电猫",
+    "zh-Hant": "紅色閃電貓"
+  },
   "type": "color",
   "tags": [
     "animal"

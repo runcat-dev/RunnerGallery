@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Horse",
+  "displayName": {
+    "en": "Horse",
+    "de": "Pferd",
+    "es": "Caballo",
+    "fr": "Cheval",
+    "ja": "ウマ",
+    "ko": "말",
+    "ru": "Лошадь",
+    "vi": "Ngựa",
+    "zh-Hans": "马",
+    "zh-Hant": "馬"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

@@ -1,6 +1,17 @@
 {
   "author": "twjohnwu",
-  "displayName": "Sisyphus",
+  "displayName": {
+    "en": "Sisyphus",
+    "de": "Sisyphos",
+    "es": "Sísifo",
+    "fr": "Sisyphe",
+    "ja": "シーシュポス",
+    "ko": "시시포스",
+    "ru": "Сизиф",
+    "vi": "Sisyphus",
+    "zh-Hans": "西西弗斯",
+    "zh-Hant": "薛西弗斯"
+  },
   "type": "monochrome",
   "tags": []
 }

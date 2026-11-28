@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Fox",
+  "displayName": {
+    "en": "Fox",
+    "de": "Fuchs",
+    "es": "Zorro",
+    "fr": "Renard",
+    "ja": "キツネ",
+    "ko": "여우",
+    "ru": "Лиса",
+    "vi": "Cáo",
+    "zh-Hans": "狐狸",
+    "zh-Hant": "狐狸"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

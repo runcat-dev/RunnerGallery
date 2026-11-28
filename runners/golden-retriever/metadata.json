@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Golden Retriever",
+  "displayName": {
+    "en": "Golden Retriever",
+    "de": "Golden Retriever",
+    "es": "Golden retriever",
+    "fr": "Golden retriever",
+    "ja": "ゴールデン・レトリーバー",
+    "ko": "골든 리트리버",
+    "ru": "Золотистый ретривер",
+    "vi": "Chó Golden Retriever",
+    "zh-Hans": "金毛寻回犬",
+    "zh-Hant": "黃金獵犬"
+  },
   "type": "monochrome",
   "tags": [
     "animal",

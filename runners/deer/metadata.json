@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Deer",
+  "displayName": {
+    "en": "Deer",
+    "de": "Hirsch",
+    "es": "Ciervo",
+    "fr": "Cerf",
+    "ja": "シカ",
+    "ko": "사슴",
+    "ru": "Олень",
+    "vi": "Hươu",
+    "zh-Hans": "鹿",
+    "zh-Hant": "鹿"
+  },
   "type": "monochrome",
   "tags": [
     "animal"

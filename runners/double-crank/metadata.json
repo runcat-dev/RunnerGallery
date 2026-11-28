@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Double Crank",
+  "displayName": {
+    "en": "Double Crank",
+    "de": "Doppelkurbel",
+    "es": "Doble manivela",
+    "fr": "Double manivelle",
+    "ja": "両クランク機構",
+    "ko": "이중 크랭크",
+    "ru": "Двухкривошипный механизм",
+    "vi": "Cơ cấu hai tay quay",
+    "zh-Hans": "双曲柄机构",
+    "zh-Hant": "雙曲柄機構"
+  },
   "type": "monochrome",
   "tags": [
     "object",

@@ -14,15 +14,18 @@
     <meta property="og:site_name" content="Runner Gallery" />
     <link href="https://fonts.googleapis.com/css?family=Exo+2:400,400i,600,600i" rel="stylesheet" />
     <link rel="stylesheet" href="./style.css" />
+    <script src="./i18n.js" defer></script>
     <script src="./script.js" defer></script>
   </head>
   <body>
     <header>
       <div>
         <a class="title" href="./index.html"> Runner Gallery </a>
+        <select class="language-select" id="language-select" data-i18n-aria-label="language" aria-label="Language"></select>
         <a
           href="https://github.com/runcat-dev/RunnerGallery"
-          title="Link for GitHub Repository"
+          title="GitHub Repository"
+          data-i18n-title="githubRepository"
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -37,8 +40,8 @@
     <div class="main">
       <div class="summary">
         <p class="title">Runner Gallery</p>
-        <p class="catchcopy">Custom runners for RunCat Neo.</p>
-        <p class="short-description">Browse, download, and import your favorites.</p>
+        <p class="catchcopy" data-i18n="catchcopy">Custom runners for RunCat Neo.</p>
+        <p class="short-description" data-i18n="shortDescription">Browse, download, and import your favorites.</p>
       </div>
       <section class="gallery">
         <div class="filters" id="filters" hidden>
@@ -49,12 +52,14 @@
         <div class="runner-grid" id="runner-grid"></div>
       </section>
       <section class="contribute">
-        <p>
+        <p id="contribute-message">
           Want to share your own runner? Contributions are welcome via
           <a
+            id="contribute-link"
             href="https://github.com/runcat-dev/RunnerGallery/blob/main/CONTRIBUTING.md"
             target="_blank"
             rel="noopener noreferrer"
+            data-i18n="pullRequest"
             >Pull Request</a
           >.
         </p>
@@ -72,6 +77,7 @@
           href="https://github.com/runcat-dev/RunnerGallery"
           target="_blank"
           rel="noopener noreferrer"
+          data-i18n="githubRepository"
           >GitHub Repository</a
         >
       </nav>

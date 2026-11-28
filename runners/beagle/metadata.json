@@ -1,6 +1,17 @@
 {
   "author": "Takuto Nakamura (Kyome22)",
-  "displayName": "Beagle",
+  "displayName": {
+    "en": "Beagle",
+    "de": "Beagle",
+    "es": "Beagle",
+    "fr": "Beagle",
+    "ja": "ビーグル",
+    "ko": "비글",
+    "ru": "Бигль",
+    "vi": "Chó Beagle",
+    "zh-Hans": "比格犬",
+    "zh-Hant": "米格魯"
+  },
   "type": "monochrome",
   "tags": [
     "animal",

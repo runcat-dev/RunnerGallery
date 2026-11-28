@@ -1,6 +1,17 @@
 {
   "author": "sean (ksssssw)",
-  "displayName": "Icosahedron",
+  "displayName": {
+    "en": "Icosahedron",
+    "de": "Ikosaeder",
+    "es": "Icosaedro",
+    "fr": "Icosaèdre",
+    "ja": "正二十面体",
+    "ko": "정이십면체",
+    "ru": "Икосаэдр",
+    "vi": "Khối hai mươi mặt",
+    "zh-Hans": "正二十面体",
+    "zh-Hant": "正二十面體"
+  },
   "type": "monochrome",
   "tags": [
     "object"
