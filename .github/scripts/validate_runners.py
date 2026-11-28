@@ -41,7 +41,7 @@ MAX_WIDTH = 100
 MIN_FRAMES = 2
 MAX_FRAMES = 30
 
-RUNNER_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+RUNNER_NAME_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 REGULAR_FILE_MODE = "100644"
 
@@ -65,7 +65,7 @@ SUPPORTED_LANGUAGES = ("en", "de", "es", "fr", "ja", "ko", "ru", "vi", "zh-Hans"
 RUNNER_TYPES = ("monochrome", "color")
 KNOWN_TAGS = ("animal", "dog", "object", "mechanism", "fitness")
 TAG_HIERARCHY = {"dog": "animal", "mechanism": "object"}
-TAG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+TAG_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 MAX_TAGS = 8
 
 
@@ -307,14 +307,14 @@ def report_unexpected_frame_files(runner: str, path: str, grouped: dict[str, lis
 
 def validate_frames(root: Path, name: str, frame_paths: list[str], report: Report) -> None:
     directory_path = f"runners/{name}/{FRAMES_DIRECTORY}"
-    frame_re = re.compile(rf"^{re.escape(name)}-frame-(0|[1-9][0-9]*)\.png$")
+    frame_re = re.compile(rf"{re.escape(name)}-frame-(0|[1-9][0-9]*)\.png")
 
     frames: dict[int, tuple[str, str]] = {}
     unexpected: dict[str, list[str]] = {}
 
     for path in sorted(frame_paths):
         filename = path.rsplit("/", 1)[-1]
-        match = frame_re.match(filename)
+        match = frame_re.fullmatch(filename)
         if match is None:
             unexpected.setdefault(classify_unexpected_frame_file(filename, name), []).append(filename)
             continue
@@ -505,7 +505,7 @@ def validate_tags(tags: object, name: str, path: str, report: Report) -> None:
         if not isinstance(tag, str):
             report.error(name, path, "`tags` entries must be strings.")
             continue
-        if not TAG_RE.match(tag):
+        if not TAG_RE.fullmatch(tag):
             report.error(name, path, f"`{tag}` is not a valid tag. Use lowercase letters, digits, and hyphens.")
             continue
         if tag not in KNOWN_TAGS:
@@ -642,7 +642,7 @@ def describe_expected(name: str, filename: str) -> str:
 def validate_runner(root: Path, name: str, tracked: dict[str, str], report: Report) -> None:
     report.checked.append(name)
 
-    if not RUNNER_NAME_RE.match(name):
+    if not RUNNER_NAME_RE.fullmatch(name):
         report.error(
             name,
             f"runners/{name}",
@@ -697,7 +697,7 @@ def validate_manifest(root: Path, tracked: dict[str, str], report: Report) -> No
 
     seen: set[str] = set()
     for item in listed:
-        if not RUNNER_NAME_RE.match(item):
+        if not RUNNER_NAME_RE.fullmatch(item):
             report.error(
                 None,
                 path,

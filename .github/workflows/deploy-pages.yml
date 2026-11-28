@@ -34,7 +34,7 @@ jobs:
         run: python3 .github/scripts/validate_runners.py --all
 
       - name: Build
-        run: python3 .github/scripts/build_site.py _site
+        run: python3 .github/scripts/build_site.py
 
       - uses: actions/upload-pages-artifact@v5
         with:

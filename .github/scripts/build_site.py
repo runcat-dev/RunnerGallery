@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Assemble the GitHub Pages site, including each runner's downloadable zip.
+"""Assemble the GitHub Pages site into `_site/`, including each runner's
+downloadable zip.
 
 A runner's zip is generated rather than committed so that `metadata.json`
 and `frames/` stay the only source of truth. Every zip holds the runner's
@@ -7,29 +8,44 @@ and `frames/` stay the only source of truth. Every zip holds the runner's
 frame order, and is built deterministically: the same inputs always produce
 the same bytes.
 
-Run `validate_runners.py` first; this script trusts its inputs.
+Frames are taken from the git index, the same list `validate_runners.py`
+checks, so an untracked file in a local checkout never reaches a zip. Run
+`validate_runners.py` first; this script trusts its inputs.
 """
 
 from __future__ import annotations
 
-import argparse
 import json
 import re
 import shutil
+import subprocess
 import zipfile
 from pathlib import Path
 
+OUTPUT_DIRECTORY = "_site"
 STATIC_FILES = ("index.html", "script.js", "style.css", "i18n.js")
 MANIFEST_PATH = "runners/manifest.json"
 FIXED_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
 REGULAR_FILE_ATTRIBUTES = 0o100644 << 16
 
 
-def frame_index(path: Path) -> int:
-    match = re.search(r"-frame-(\d+)\.png$", path.name)
-    if match is None:
-        raise ValueError(f"{path} is not a frame file")
-    return int(match.group(1))
+def tracked_frame_paths(root: Path, name: str) -> list[Path]:
+    output = subprocess.run(
+        ["git", "-C", str(root), "ls-files", "-z", "--", f"runners/{name}/frames"],
+        check=True,
+        stdout=subprocess.PIPE,
+    ).stdout
+    frame_re = re.compile(rf"runners/{re.escape(name)}/frames/{re.escape(name)}-frame-(0|[1-9][0-9]*)\.png")
+    frames: dict[int, Path] = {}
+    for raw in output.split(b"\0"):
+        if not raw:
+            continue
+        path = raw.decode("utf-8")
+        match = frame_re.fullmatch(path)
+        if match is None:
+            raise SystemExit(f"`{path}` is not a frame file. Run validate_runners.py first.")
+        frames[int(match.group(1))] = root / path
+    return [frames[index] for index in sorted(frames)]
 
 
 def add_entry(archive: zipfile.ZipFile, name: str, data: bytes) -> None:
@@ -39,20 +55,18 @@ def add_entry(archive: zipfile.ZipFile, name: str, data: bytes) -> None:
     archive.writestr(entry, data)
 
 
-def build_runner_zip(runner_directory: Path, destination: Path) -> None:
-    frames = sorted((runner_directory / "frames").glob("*.png"), key=frame_index)
+def build_runner_zip(root: Path, name: str, destination: Path) -> None:
     with zipfile.ZipFile(destination, "w") as archive:
-        add_entry(archive, "metadata.json", (runner_directory / "metadata.json").read_bytes())
-        for frame in frames:
+        add_entry(archive, "metadata.json", (root / "runners" / name / "metadata.json").read_bytes())
+        for frame in tracked_frame_paths(root, name):
             add_entry(archive, f"frames/{frame.name}", frame.read_bytes())
 
 
-def build_site(root: Path, output: Path) -> list[str]:
-    if root.is_relative_to(output):
-        raise SystemExit(f"Refusing to build into {output}, which contains the repository.")
+def build_site(root: Path) -> list[str]:
+    output = root / OUTPUT_DIRECTORY
     if output.exists():
         shutil.rmtree(output)
-    output.mkdir(parents=True)
+    output.mkdir()
 
     for filename in STATIC_FILES:
         shutil.copy2(root / filename, output / filename)
@@ -67,19 +81,14 @@ def build_site(root: Path, output: Path) -> list[str]:
         destination.mkdir()
         shutil.copy2(source / "metadata.json", destination / "metadata.json")
         shutil.copy2(source / "preview.png", destination / "preview.png")
-        build_runner_zip(source, destination / f"{name}.zip")
+        build_runner_zip(root, name, destination / f"{name}.zip")
     return names
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Assemble the GitHub Pages site.")
-    parser.add_argument("output", nargs="?", default="_site", help="output directory (default: _site)")
-    arguments = parser.parse_args()
-
     root = Path(__file__).resolve().parents[2]
-    output = Path(arguments.output).resolve()
-    names = build_site(root, output)
-    print(f"Built {len(names)} runners into {output}")
+    names = build_site(root)
+    print(f"Built {len(names)} runners into {root / OUTPUT_DIRECTORY}")
 
 
 if __name__ == "__main__":
