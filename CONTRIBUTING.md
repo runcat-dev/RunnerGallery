@@ -11,26 +11,23 @@ Use a lowercase, hyphen-separated name (e.g., `welsh-corgi`). This name is used 
 
 ### 2. Prepare the files
 
-Place the following three files in `runners/<runner-name>/`:
+Place the following files in `runners/<runner-name>/`:
 
 ```
 runners/
 └── <runner-name>/
-    ├── <runner-name>-frames.zip
+    ├── frames/
+    │   ├── <runner-name>-frame-0.png
+    │   ├── <runner-name>-frame-1.png
+    │   └── ...
     ├── metadata.json
     └── preview.png
 ```
 
-#### `<runner-name>-frames.zip`
+#### `frames/`
 
-A zip archive of a `<runner-name>-frames/` directory containing the animation frames:
-
-```
-<runner-name>-frames/
-├── <runner-name>-frame-0.png
-├── <runner-name>-frame-1.png
-└── ...
-```
+The animation frames, committed as individual PNG files.
+Do not zip them; the gallery builds the downloadable zip from these files and `metadata.json` (see [Download Format](#download-format)).
 
 Frame requirements:
 
@@ -41,13 +38,7 @@ Frame requirements:
 - Width: between 10px and 100px
 - All frames must have the same size
 - A transparent background is recommended
-- The zip must contain nothing but the frames — no Finder-generated files such as `.DS_Store`, `__MACOSX/`, or `._*`
-
-Tip for macOS users — creating the zip from the command line avoids Finder-generated junk:
-
-```sh
-zip -r <runner-name>-frames.zip <runner-name>-frames -x "*.DS_Store" "__MACOSX/*"
-```
+- `frames/` must contain nothing but the frames — no Finder-generated files such as `.DS_Store` or `._*`
 
 #### `metadata.json`
 
@@ -120,7 +111,7 @@ Add your runner name to `runners/manifest.json`. Keep the list sorted alphabetic
 
 ### 4. Check your runner locally
 
-Every Pull Request is automatically checked: the frame archive must contain nothing but your frames, and every image must be a genuine, fully decodable PNG.
+Every Pull Request is automatically checked: `frames/` must contain nothing but your frames, and every image must be a genuine, fully decodable PNG.
 You can run exactly the same checks yourself before pushing, so that you do not have to wait for CI:
 
 ```sh
@@ -148,12 +139,31 @@ A Pull Request that bundles multiple runners cannot be reviewed and will be clos
 - Classic RunCat runners are revived only by the maintainer, who adjusts every frame again before adding them to the gallery.
   Please do not submit them yourself; to ask for one, open a [Runner Request](https://github.com/runcat-dev/RunnerGallery/issues/new?template=runner-request.yml) instead.
 
+## Download Format
+
+The downloadable zips are not stored in this repository.
+When `main` is deployed to GitHub Pages, `.github/scripts/build_site.py` builds `runners/<runner-name>/<runner-name>.zip` for every runner with the following layout:
+
+```
+<runner-name>.zip
+├── metadata.json
+└── frames/
+    ├── <runner-name>-frame-0.png
+    ├── <runner-name>-frame-1.png
+    └── ...
+```
+
+- `metadata.json` is the runner's `metadata.json`, byte for byte, so an app importing the zip can read the localized `displayName` and the `type`.
+- The frames play in ascending numeric order of `<N>`.
+
 ## Previewing the Site Locally
 
-The gallery page loads `runners/manifest.json` with `fetch()`, which does not work over `file://`. Run a local server from the repository root instead:
+The gallery page loads `runners/manifest.json` with `fetch()`, which does not work over `file://`.
+Build the site and serve it from the `_site` directory instead:
 
 ```sh
-python3 -m http.server 8000
+python3 .github/scripts/build_site.py
+python3 -m http.server 8000 -d _site
 ```
 
 Then open <http://localhost:8000/> in your browser.

@@ -1,6 +1,6 @@
 ---
 name: add-runner-pr
-description: Create a branch, commit, and open a pull request that adds a new runner, following this repository's conventions. Assumes the user has already placed `metadata.json`, `preview.png`, and `<name>-frames.zip` under `runners/<name>/`. Triggers — "add a runner PR", "open a PR for the new runner", "ランナー追加のPRを作って", "〜のランナーをPRにして".
+description: Create a branch, commit, and open a pull request that adds a new runner, following this repository's conventions. Assumes the user has already placed `metadata.json`, `preview.png`, and the `frames/` directory under `runners/<name>/`. Triggers — "add a runner PR", "open a PR for the new runner", "ランナー追加のPRを作って", "〜のランナーをPRにして".
 ---
 
 # Add-runner PR
@@ -11,7 +11,7 @@ Before starting, confirm the user has placed:
 
 - `runners/<name>/metadata.json`
 - `runners/<name>/preview.png`
-- `runners/<name>/<name>-frames.zip`
+- `runners/<name>/frames/<name>-frame-<N>.png`
 
 The `runners/manifest.json` entry may or may not already be in place. Check with `git status` and `git diff runners/manifest.json`. If missing, add `<name>` while preserving **alphabetical order**.
 
@@ -22,11 +22,11 @@ The `runners/manifest.json` entry may or may not already be in place. Check with
 Do not tick the PR checkboxes mechanically. Run the checks first, then tick.
 
 ```bash
-# Zip layout — expect <name>-frames/<name>-frame-<N>.png, no __MACOSX or .DS_Store
-unzip -l runners/<name>/<name>-frames.zip
+# Frame layout — expect only <name>-frame-<N>.png, no .DS_Store or ._*
+ls -A runners/<name>/frames
 
-# Compare with an existing runner (e.g. dots) to confirm the same layout
-unzip -l runners/dots/dots-frames.zip | head -5
+# Run the same checks as CI
+python3 .github/scripts/validate_runners.py --all
 
 # preview.png dimensions — height must be 36, width must be 10–100
 file runners/<name>/preview.png
@@ -37,7 +37,7 @@ file runners/<name>/preview.png
 If some languages are missing, propose translations to the user and fill them in after approval.
 `tags` may only use tags already in `KNOWN_TAGS`; if none fits, use `[]`. Never introduce a new tag in a runner PR — that needs its own PR.
 
-If anything violates the spec (width out of range, height not 36, junk files inside the zip, etc.), **send the asset back to the user for fixing**. Do not loosen the spec ([[runner-spec-is-absolute]]).
+If anything violates the spec (width out of range, height not 36, junk files inside `frames/`, etc.), **send the asset back to the user for fixing**. Do not loosen the spec ([[runner-spec-is-absolute]]).
 
 ### 2. Branch and commit
 
@@ -74,7 +74,7 @@ Write the Summary in **English**, even when the conversation with the user is in
 `<name>` — a <monochrome|color> runner featuring <one-line visual description>. <N> frames at <W>×36.
 ```
 
-- `<N>`: frame count from `unzip -l`
+- `<N>`: frame count from `ls runners/<name>/frames | wc -l`
 - `<W>×36`: width from `file runners/<name>/preview.png`
 
 Create the PR by passing the filled-in template body via a heredoc:
