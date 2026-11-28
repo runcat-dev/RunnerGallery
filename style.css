@@ -43,7 +43,6 @@ header select.language-select {
 
 header select.language-select:hover {
   border-color: cadetblue;
-  color: cadetblue;
 }
 
 header svg.github-icon {
